@@ -1,0 +1,2312 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#FF6B00" />
+  <title>ManggePrompt Studio (manggeprompt.id) — Portal Katalog, Manajemen Termin & Nota/BAST Resmi</title>
+
+  <!-- Google Fonts: Plus Jakarta Sans & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Phosphor Icons -->
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+  <!-- QRCode Generator Library (Untuk QR Validasi Asli yang Bisa Di-Scan) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              indigo: '#5B46F6',
+              orange: '#FF6B00',
+              orangeLight: '#FF8800',
+              crimson: '#E62E3D',
+              dark: '#0B0D13',
+              cardDark: '#1E1F29'
+            }
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background:
+        radial-gradient(circle at 12% 14%, rgba(255, 122, 0, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 88% 20%, rgba(91, 70, 246, 0.12) 0%, transparent 45%),
+        radial-gradient(circle at 15% 15%, #ECEFF8 0%, #DCE1EE 55%, #D2D8E9 100%);
+      color: #111827;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    .glass-shell {
+      background: rgba(255, 255, 255, 0.58);
+      backdrop-filter: blur(26px);
+      -webkit-backdrop-filter: blur(26px);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 28px 65px -12px rgba(29, 36, 94, 0.14), inset 0 1px 2px rgba(255, 255, 255, 0.9);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 10px 30px -5px rgba(31, 38, 135, 0.06);
+    }
+
+    .pill-active {
+      background: linear-gradient(135deg, #5B46F6 0%, #4834DF 100%);
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px -4px rgba(91, 70, 246, 0.48);
+    }
+
+    .pill-orange {
+      background: linear-gradient(135deg, #FF7A00 0%, #EA580C 100%);
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px -4px rgba(234, 88, 12, 0.45);
+    }
+
+    .holo-card-1 {
+      background:
+        radial-gradient(at 15% 20%, rgba(96, 239, 255, 0.85) 0px, transparent 55%),
+        radial-gradient(at 85% 30%, rgba(255, 133, 210, 0.82) 0px, transparent 50%),
+        radial-gradient(at 60% 85%, rgba(253, 224, 71, 0.75) 0px, transparent 50%),
+        linear-gradient(135deg, #93C5FD 0%, #E0E7FF 50%, #F5D0FE 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 16px 32px -10px rgba(99, 102, 241, 0.25);
+    }
+
+    .holo-card-2 {
+      background:
+        radial-gradient(at 18% 82%, rgba(99, 79, 248, 0.95) 0px, transparent 55%),
+        radial-gradient(at 88% 20%, rgba(165, 243, 252, 0.9) 0px, transparent 55%),
+        radial-gradient(at 50% 50%, rgba(255, 122, 0, 0.55) 0px, transparent 60%),
+        linear-gradient(135deg, #1E1B4B 0%, #4338CA 48%, #06B6D4 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 16px 32px -10px rgba(79, 70, 229, 0.35);
+    }
+
+    .holo-card-3 {
+      background:
+        radial-gradient(at 20% 25%, rgba(125, 211, 252, 0.88) 0px, transparent 50%),
+        radial-gradient(at 75% 45%, rgba(251, 146, 60, 0.78) 0px, transparent 50%),
+        radial-gradient(at 85% 88%, rgba(254, 240, 138, 0.9) 0px, transparent 55%),
+        linear-gradient(135deg, #BAE6FD 0%, #FED7AA 55%, #FEF08A 100%);
+      border: 1.5px solid rgba(255, 255, 255, 0.92);
+      box-shadow: 0 16px 32px -10px rgba(234, 88, 12, 0.22);
+    }
+
+    .neon-metal-card {
+      background: linear-gradient(145deg, #191B26 0%, #0B0D13 100%);
+      position: relative;
+      border: 2px solid rgba(255, 122, 0, 0.75);
+      box-shadow:
+        0 0 24px rgba(255, 107, 0, 0.35),
+        0 0 45px rgba(91, 70, 246, 0.35),
+        inset 0 0 18px rgba(255, 122, 0, 0.22);
+    }
+
+    .emv-chip {
+      background: linear-gradient(135deg, #E2E8F0 0%, #CBD5E1 45%, #F8FAFC 100%);
+      border: 1px solid rgba(148, 163, 184, 0.6);
+    }
+
+    .mp-wet-stamp {
+      transform: rotate(-7deg);
+      mix-blend-mode: multiply;
+      filter: contrast(1.06);
+      user-select: none;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body {
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+      body * {
+        visibility: hidden;
+      }
+      #printableDocumentArea, #printableDocumentArea * {
+        visibility: visible;
+      }
+      #printableDocumentArea {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        box-shadow: none !important;
+        border: 1.5px solid #cbd5e1 !important;
+        background: #ffffff !important;
+        border-radius: 16px !important;
+        padding: 24px !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="p-2 sm:p-5 lg:p-8 select-none sm:select-auto">
+
+  <!-- REUSABLE SVG DEFINITIONS (LOGO MANGGEPROMPT STUDIO) -->
+  <svg class="hidden" aria-hidden="true">
+    <defs>
+      <linearGradient id="mpOrangeGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#FF9A00" />
+        <stop offset="50%" stop-color="#FF6B00" />
+        <stop offset="100%" stop-color="#E65100" />
+      </linearGradient>
+      <linearGradient id="mpWhiteGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stop-color="#FFFFFF" />
+        <stop offset="100%" stop-color="#E2E8F0" />
+      </linearGradient>
+      <symbol id="mp-official-logo" viewBox="0 0 220 220">
+        <rect width="220" height="220" rx="44" fill="#0B0D13" />
+        <path d="M36 164 L44 164 L44 62 L98 122 L156 54 L132 54 L98 95 L56 48 L36 48 Z" fill="url(#mpWhiteGrad)" />
+        <rect x="40" y="48" width="16" height="116" fill="url(#mpWhiteGrad)" />
+        <path d="M32 164 L64 164 L60 156 L36 156 Z" fill="url(#mpWhiteGrad)" />
+        <path d="M74 114 C67 114 66 118 66 124 L66 129 C66 133 62 135 59 135 C62 135 66 137 66 141 L66 146 C66 152 67 156 74 156"
+              fill="none" stroke="url(#mpOrangeGrad)" stroke-width="6.5" stroke-linecap="round" />
+        <rect x="81" y="131" width="6.5" height="6.5" rx="1" fill="#FFFFFF" />
+        <rect x="92" y="131" width="6.5" height="6.5" rx="1" fill="#FFFFFF" />
+        <rect x="103" y="131" width="6.5" height="6.5" rx="1" fill="#FFFFFF" />
+        <path d="M108 106 L108 164 L126 164 L126 138 L152 138 C174 138 188 124 188 103 C188 82 174 68 152 68 L138 68 L124 84 L151 84 C163 84 170 91 170 103 C170 115 163 122 151 122 L126 122 L126 92 Z"
+              fill="url(#mpOrangeGrad)" />
+        <rect x="160" y="54" width="8" height="8" rx="1.5" fill="#FF7A00" />
+        <rect x="173" y="57" width="6" height="6" rx="1" fill="#FF8800" />
+        <rect x="166" y="41" width="6" height="6" rx="1" fill="#FF6B00" />
+        <rect x="155" y="45" width="7" height="7" rx="1" fill="#FF9A00" />
+        <rect x="176" y="46" width="4.5" height="4.5" rx="1" fill="#FF7A00" />
+        <rect x="168" y="31" width="4.5" height="4.5" rx="1" fill="#FF8800" />
+        <text x="110" y="196" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="21" letter-spacing="-0.5">
+          <tspan fill="#FFFFFF">mangge</tspan><tspan fill="#FF7A00">prompt.id</tspan>
+        </text>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- MAIN FROSTED GLASS CONTAINER -->
+  <main class="max-w-6xl mx-auto glass-shell rounded-[28px] sm:rounded-[38px] p-4 sm:p-7 lg:p-9 pb-24 sm:pb-9 relative">
+
+    <!-- BAR PENGATURAN URL GOOGLE APPS SCRIPT (HANYA TAMPIL UNTUK ADMIN STUDIO) -->
+    <div id="gasConfigBar" data-admin-only="true" class="hidden mb-4 glass-card bg-[#0B0D13]/95 text-white rounded-2xl p-3 border border-orange-500/40 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 no-print">
+      <div class="flex items-center gap-2.5">
+        <span id="apiStatusDot" class="w-3 h-3 rounded-full bg-amber-400 shrink-0 animate-pulse"></span>
+        <div>
+          <p class="text-xs font-extrabold tracking-tight flex items-center gap-1.5 flex-wrap">
+            <span>Panel Backend Google Apps Script (Admin Only)</span>
+            <span id="apiModeBadge" class="px-2 py-0.5 rounded-full bg-orange-500/20 text-[10px] font-bold text-orange-300 border border-orange-400/30">Cache Lokal Aktif</span>
+          </p>
+          <p class="text-[10px] text-gray-300">Tempelkan URL Web App (<code class="text-orange-400">https://script.google.com/macros/s/.../exec</code>) untuk sinkronisasi ke Google Sheets.</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-1.5 w-full sm:w-auto">
+        <input id="gasUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" class="w-full sm:w-64 px-3 py-1.5 rounded-xl bg-white/10 border border-white/20 text-xs text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400">
+        <button onclick="saveGasUrlConfig()" class="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-orange-500 to-amber-500 hover:from-orange-400 hover:to-amber-400 text-white font-extrabold text-xs whitespace-nowrap transition shadow">
+          Hubungkan
+        </button>
+        <button onclick="syncFromGasApi()" title="Muat Ulang Data dari Sheet" class="p-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs">
+          <i class="ph-bold ph-arrows-clockwise text-sm"></i>
+        </button>
+        <button onclick="resetLocalCacheData()" title="Reset Cache Lokal ke Data Default" class="px-2.5 py-1.5 rounded-xl bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 font-bold text-[11px] whitespace-nowrap border border-rose-400/30">
+          Reset Cache
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. TOP HEADER BAR -->
+    <header class="flex flex-wrap items-center justify-between gap-3 mb-5 no-print">
+      <div class="flex items-center gap-3">
+        <svg class="w-12 h-12 rounded-2xl shadow-lg shadow-orange-500/20 border border-white/40 shrink-0">
+          <use href="#mp-official-logo"></use>
+        </svg>
+        <div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <h1 class="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900">
+              Mangge<span class="text-brand-orange">Prompt</span> Studio
+            </h1>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-bold rounded-md bg-gray-900 text-orange-400">
+              manggeprompt.id
+            </span>
+            <span id="roleBadgeHeader" class="px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-orange-100 text-orange-800 border border-orange-200">
+              Mode Publik
+            </span>
+          </div>
+          <p class="text-[11px] text-gray-500 hidden sm:block">Sistem Katalog Paket Digital, Tracking Termin Proyek & Generator Nota/Kwitansi/BAST Berstempel</p>
+        </div>
+      </div>
+
+      <!-- Search Pill & User Profile Controls -->
+      <div class="flex items-center gap-2.5 w-full sm:w-auto justify-end">
+        <div class="relative flex-1 sm:w-64">
+          <input id="globalSearchInput" oninput="handleGlobalSearch(this.value)" type="text" placeholder="Cari paket aplikasi, klien, atau invoice..."
+            class="w-full pl-4 pr-9 py-2 rounded-full bg-white/85 border border-white text-xs font-medium text-gray-700 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          <i class="ph-bold ph-magnifying-glass absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+        </div>
+
+        <button onclick="openLoginModal()" id="btnAuthAction" class="flex items-center gap-2 px-3.5 py-2 rounded-full bg-white/90 hover:bg-white text-xs font-bold text-gray-800 shadow-sm border border-white transition">
+          <div id="authAvatarBadge" class="w-6 h-6 rounded-full bg-gray-900 text-orange-400 flex items-center justify-center font-extrabold text-[10px]">
+            MP
+          </div>
+          <span id="authLabelText">Login Klien / Admin</span>
+        </button>
+
+        <button onclick="openGuideModal()" title="SOP Alur Bisnis & Cara Kerja" class="w-9 h-9 rounded-full bg-white/85 hover:bg-white flex items-center justify-center text-gray-700 shadow-sm border border-white">
+          <i class="ph-bold ph-book-open-text text-lg"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. PILL FILTER / NAVIGATION TABS -->
+    <nav class="flex items-center justify-between gap-2 mb-5 overflow-x-auto pb-1 no-print">
+      <div class="flex items-center gap-2">
+        <button onclick="switchMainTab('dashboard')" id="tabBtn-dashboard" class="tab-pill pill-active px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition">
+          Quick Overview & Katalog
+        </button>
+        <button onclick="switchMainTab('projects')" id="tabBtn-projects" class="tab-pill bg-white/75 hover:bg-white text-gray-700 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition">
+          Proyek & Termin Klien
+        </button>
+        <button onclick="switchMainTab('documents')" id="tabBtn-documents" class="tab-pill bg-white/75 hover:bg-white text-gray-700 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition flex items-center gap-1.5">
+          <i class="ph-bold ph-stamp text-orange-500"></i>
+          <span>Nota / Kwitansi / BAST</span>
+        </button>
+        <button onclick="switchMainTab('verify')" id="tabBtn-verify" class="tab-pill bg-white/75 hover:bg-white text-gray-700 px-4 py-2 rounded-full text-xs font-bold whitespace-nowrap transition flex items-center gap-1">
+          <i class="ph-bold ph-qr-code text-indigo-600"></i>
+          <span>Cek Validasi QR</span>
+        </button>
+      </div>
+
+      <div class="hidden md:flex items-center gap-1.5 bg-white/65 px-3 py-1.5 rounded-full border border-white text-[11px] font-semibold text-gray-600">
+        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+        <span id="activeSecurityBadgeText">Proteksi Role & QR Deep-Link Aktif</span>
+      </div>
+    </nav>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 1: DASHBOARD & HOLOGRAPHIC CATALOG (BENTO GRID)       -->
+    <!-- ========================================================== -->
+    <section id="view-dashboard" class="space-y-5">
+
+      <!-- TOP KPI SUMMARY STRIP -->
+      <div class="glass-card rounded-3xl p-4 sm:p-6 flex flex-col lg:flex-row lg:items-center justify-between gap-5">
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-8 flex-1">
+          <div>
+            <p id="kpiLabel1" class="text-xs font-semibold text-gray-500 mb-1">Total Pembayaran Masuk</p>
+            <h2 id="kpiTotalRevenue" class="text-xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Rp 0</h2>
+            <p class="text-[11px] text-emerald-600 font-semibold mt-0.5">Terverifikasi di Sistem</p>
+          </div>
+          <div>
+            <p id="kpiLabel2" class="text-xs font-semibold text-gray-500 mb-1">Sisa Tagihan Termin (Piutang)</p>
+            <h2 id="kpiPendingTermin" class="text-xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Rp 0</h2>
+            <p class="text-[11px] text-orange-600 font-semibold mt-0.5">Menunggu Pelunasan BAST</p>
+          </div>
+          <div class="col-span-2 sm:col-span-1">
+            <p class="text-xs font-semibold text-gray-500 mb-1">Proyek & Lisensi Aktif</p>
+            <h2 id="kpiActiveCount" class="text-xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">0</h2>
+            <p class="text-[11px] text-gray-500 font-medium mt-0.5">Garansi Maintenance 90 Hari</p>
+          </div>
+        </div>
+
+        <!-- Right Quick Action Strip -->
+        <div class="flex items-center justify-between sm:justify-end gap-2.5 pt-3 lg:pt-0 border-t lg:border-t-0 border-gray-200/60">
+          <button onclick="openOrderModal('Jasa Custom Aplikasi')" class="flex items-center gap-2 px-4 py-2 rounded-full bg-white hover:bg-orange-50 text-xs font-bold text-gray-800 shadow-sm border border-gray-100 transition">
+            <span class="w-2.5 h-2.5 rounded-full bg-brand-orange"></span>
+            <span>Order / Buat Tagihan Baru</span>
+            <i class="ph-bold ph-arrow-right text-xs"></i>
+          </button>
+          <button data-admin-only="true" onclick="openProductModal()" title="Tambah Paket Katalog (Khusus Admin)" class="hidden w-9 h-9 rounded-full bg-gray-900 hover:bg-orange-600 text-white font-bold flex items-center justify-center shadow-sm transition">
+            <i class="ph-bold ph-plus"></i>
+          </button>
+          <div onclick="switchMainTab('documents')" id="badgeDocCount" class="cursor-pointer w-9 h-9 rounded-full bg-brand-orange text-white font-extrabold text-xs flex items-center justify-center shadow-md shadow-orange-500/30" title="Jumlah Transaksi">
+            3
+          </div>
+        </div>
+      </div>
+
+      <!-- 3 HOLOGRAPHIC PRODUCT & SERVICE CARDS -->
+      <div>
+        <div class="flex items-center justify-between mb-2.5 px-1">
+          <span class="text-xs font-extrabold uppercase tracking-wider text-gray-500">Katalog Paket Digital & Jasa Aplikasi ManggePrompt Studio</span>
+          <span class="text-[11px] font-semibold text-brand-orange">Klik kartu untuk Order / Terbitkan Invoice</span>
+        </div>
+        <div id="catalogCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Dirender dinamis oleh JS -->
+        </div>
+      </div>
+
+      <!-- ASYMMETRIC BENTO ROW 1: DYNAMIC ANALYTICS CHART (LEFT) + WORKFLOW DOCS (RIGHT) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <!-- Dynamic Combo Chart Card (7 cols) -->
+        <div class="lg:col-span-7 glass-card rounded-3xl p-5 flex flex-col justify-between">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-gray-900">Analitik Real-Time Nilai Kontrak vs Pembayaran Masuk</h3>
+              <p class="text-[11px] text-gray-500">Grafik otomatis menyesuaikan setiap pesanan baru & pelunasan termin klien</p>
+            </div>
+            <div class="flex items-center gap-3 text-[10px] font-bold">
+              <span class="flex items-center gap-1 text-indigo-700"><span class="w-2.5 h-2.5 rounded-sm bg-indigo-600 inline-block"></span> Nilai Kontrak</span>
+              <span class="flex items-center gap-1 text-orange-600"><span class="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span> Dana Masuk</span>
+            </div>
+          </div>
+
+          <div id="dynamicChartContainer" class="relative w-full h-48 pt-2">
+            <!-- Dirender otomatis oleh renderDynamicChart() -->
+          </div>
+        </div>
+
+        <!-- Siklus Dokumen Terkunci Secara Sistematis (5 cols) -->
+        <div class="lg:col-span-5 glass-card rounded-3xl p-5 flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-gray-900">Alur Dokumen Tersistematis</h3>
+              <p class="text-[10px] text-gray-500">Urutan baku standar SPJ Instansi & Agensi</p>
+            </div>
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-100 text-orange-800 text-[10px] font-extrabold">Cap Oranye Aktif</span>
+          </div>
+
+          <div class="space-y-2 my-auto">
+            <button onclick="openQuickDocGenerator('PENAWARAN')" class="w-full p-2.5 rounded-2xl bg-white/90 hover:bg-white flex items-center justify-between shadow-sm border border-white transition group">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shadow-sm text-xs font-extrabold">1</div>
+                <div class="text-left">
+                  <p class="text-xs font-extrabold text-gray-900 group-hover:text-indigo-600 transition">Quotation / Surat Penawaran & SPK</p>
+                  <p class="text-[10px] text-gray-500">Kunci ruang lingkup fitur & skema pajak sebelum mulai</p>
+                </div>
+              </div>
+              <i class="ph-bold ph-caret-right text-gray-400"></i>
+            </button>
+
+            <button onclick="openQuickDocGenerator('INVOICE')" class="w-full p-2.5 rounded-2xl bg-white/90 hover:bg-white flex items-center justify-between shadow-sm border border-white transition group">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-orange-500 text-white flex items-center justify-center shadow-sm text-xs font-extrabold">2</div>
+                <div class="text-left">
+                  <p class="text-xs font-extrabold text-gray-900 group-hover:text-orange-600 transition">Nota / Invoice Tagihan (DP / Pelunasan)</p>
+                  <p class="text-[10px] text-gray-500">Dilengkapi kalkulator PPN 11%, PPh 23 2% & Kirim WA</p>
+                </div>
+              </div>
+              <i class="ph-bold ph-caret-right text-gray-400"></i>
+            </button>
+
+            <button onclick="openQuickDocGenerator('BAST')" class="w-full p-2.5 rounded-2xl bg-white/90 hover:bg-white flex items-center justify-between shadow-sm border border-white transition group">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-slate-800 text-white flex items-center justify-center shadow-sm text-xs font-extrabold">3</div>
+                <div class="text-left">
+                  <p class="text-xs font-extrabold text-gray-900 group-hover:text-slate-700 transition">BAST (Berita Acara Serah Terima 100%)</p>
+                  <p class="text-[10px] text-gray-500">Wajib progres 100% untuk pemberkasan pencairan dana</p>
+                </div>
+              </div>
+              <i class="ph-bold ph-caret-right text-gray-400"></i>
+            </button>
+
+            <button onclick="openQuickDocGenerator('KWITANSI')" class="w-full p-2.5 rounded-2xl bg-white/90 hover:bg-white flex items-center justify-between shadow-sm border border-white transition group">
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-full bg-emerald-600 text-white flex items-center justify-center shadow-sm text-xs font-extrabold">4</div>
+                <div class="text-left">
+                  <p class="text-xs font-extrabold text-gray-900 group-hover:text-emerald-600 transition">Kwitansi Sah Berstempel + Buka Source Code</p>
+                  <p class="text-[10px] text-gray-500">Bukti pembayaran sah lengkap QR Code Validasi</p>
+                </div>
+              </div>
+              <i class="ph-bold ph-caret-right text-gray-400"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASYMMETRIC BENTO ROW 2: TRANSAKSI TERBARU (LEFT) + NEON METAL CARD (RIGHT) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        <div class="lg:col-span-8 glass-card rounded-3xl p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2 mb-3">
+            <div>
+              <h3 class="text-sm sm:text-base font-extrabold text-gray-900">Daftar Kontrak Proyek, Termin & Dokumen Klien</h3>
+              <p id="tableFilterSubtitle" class="text-[11px] text-gray-500">Menampilkan proyek aktif beserta status verifikasi pembayaran</p>
+            </div>
+            <button onclick="openOrderModal('Produk Digital Siap Pakai')" class="px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 border border-orange-200 text-[11px] font-bold hover:bg-orange-100 transition">
+              + Input Order Baru
+            </button>
+          </div>
+
+          <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr class="text-[11px] font-bold text-gray-400 border-b border-gray-200/70">
+                  <th class="py-2 pr-3">Proyek / Paket & Klien</th>
+                  <th class="py-2 px-3">Tahap & Pajak</th>
+                  <th class="py-2 px-3">Total / Sisa</th>
+                  <th class="py-2 pl-3 text-right">Aksi Dokumen</th>
+                </tr>
+              </thead>
+              <tbody id="recentTransactionsTableBody" class="divide-y divide-gray-200/50 text-xs">
+                <!-- Dirender oleh JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Dark Neon Glow Highlight Card (4 cols) -->
+        <div class="lg:col-span-4 neon-metal-card rounded-3xl p-5 text-white flex flex-col justify-between min-h-[210px]">
+          <div class="flex items-center justify-between">
+            <span class="px-2.5 py-0.5 rounded-full bg-orange-500/20 text-[10px] font-bold text-orange-300 border border-orange-400/30">
+              manggeprompt.id VIP
+            </span>
+            <svg class="w-8 h-8 rounded-lg border border-white/20"><use href="#mp-official-logo"></use></svg>
+          </div>
+
+          <div class="my-3">
+            <h3 class="text-lg sm:text-xl font-extrabold leading-snug tracking-tight">
+              Standar SPJ Instansi<br /><span class="text-orange-400">& Sekolah 2026.</span>
+            </h3>
+            <p class="text-[11px] text-gray-300 mt-1">
+              Otomatis menghitung PPN 11% & PPh 23 (2%), membuat QR Code Validasi asli yang bisa di-scan bendahara, serta mengunci BAST hingga progres 100%.
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button onclick="openOrderModal('Custom WebApp Instansi/Sekolah')" class="px-4 py-2 rounded-full pill-orange text-white font-extrabold text-xs transition shadow">
+              Buat Kontrak SPK
+            </button>
+            <span class="ml-auto px-3 py-1 rounded-full bg-white/10 text-[10px] font-semibold text-orange-200">
+              QR Scan Ready
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 2: PROYEK & TERMIN KLIEN (DENGAN SLIDER PROGRES ADMIN)-->
+    <!-- ========================================================== -->
+    <section id="view-projects" class="hidden space-y-4">
+      <div class="glass-card rounded-3xl p-5 flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 class="text-base sm:text-lg font-extrabold text-gray-900">Manajemen Tahapan Proyek, Termin & Deliverable</h2>
+          <p class="text-xs text-gray-500">BAST hanya terbuka saat progres mencapai 100%, dan Source Code hanya terbuka otomatis setelah status LUNAS.</p>
+        </div>
+        <button onclick="openOrderModal('Jasa Custom Aplikasi')" class="px-4 py-2 rounded-full pill-orange text-xs font-bold">
+          + Tambah Proyek Baru
+        </button>
+      </div>
+
+      <div id="projectsGridContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <!-- Dirender oleh JS -->
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 3: GENERATOR NOTA / INVOICE, KWITANSI, PENAWARAN, BAST -->
+    <!-- ========================================================== -->
+    <section id="view-documents" class="hidden space-y-5">
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-5">
+        <!-- Form Konfigurasi Dokumen (5 Cols) -->
+        <div class="lg:col-span-5 glass-card rounded-3xl p-5 space-y-3.5 no-print">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-base font-extrabold text-gray-900">Generator Dokumen Resmi</h2>
+              <p id="docLockNotice" class="text-[11px] text-gray-500">Pilih pesanan klien untuk memuat data otomatis</p>
+            </div>
+            <svg class="w-9 h-9 rounded-xl shrink-0"><use href="#mp-official-logo"></use></svg>
+          </div>
+
+          <!-- Pilihan Jenis Dokumen -->
+          <div class="grid grid-cols-2 gap-2">
+            <button type="button" onclick="selectDocType('PENAWARAN')" id="docTypeBtn-PENAWARAN" class="doc-type-btn bg-white text-gray-700 py-2 px-3 rounded-xl text-xs font-bold text-center border border-gray-200">
+              1. Quotation / SPK
+            </button>
+            <button type="button" onclick="selectDocType('INVOICE')" id="docTypeBtn-INVOICE" class="doc-type-btn pill-active py-2 px-3 rounded-xl text-xs font-bold text-center">
+              2. Nota / Invoice
+            </button>
+            <button type="button" onclick="selectDocType('BAST')" id="docTypeBtn-BAST" class="doc-type-btn bg-white text-gray-700 py-2 px-3 rounded-xl text-xs font-bold text-center border border-gray-200">
+              3. BAST Serah Terima
+            </button>
+            <button type="button" onclick="selectDocType('KWITANSI')" id="docTypeBtn-KWITANSI" class="doc-type-btn bg-white text-gray-700 py-2 px-3 rounded-xl text-xs font-bold text-center border border-gray-200">
+              4. Kwitansi Sah
+            </button>
+          </div>
+
+          <!-- Banner Peringatan Sistem jika Dokumen Belum Memenuhi Syarat -->
+          <div id="docWorkflowWarning" class="hidden p-3 rounded-2xl bg-amber-50 border border-amber-300 text-[11px] text-amber-900 font-semibold"></div>
+
+          <!-- Pilih dari Transaksi yang Ada -->
+          <div>
+            <label class="block text-[11px] font-bold text-gray-600 mb-1">Ambil Data Otomatis dari Pesanan Klien:</label>
+            <select id="docSelectTransaction" onchange="fillDocFromTransaction(this.value)" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold text-gray-800">
+              <!-- Diisi oleh JS -->
+            </select>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Nomor Dokumen</label>
+              <input id="docNumberInput" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="INV/MP/2026/10/001" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Tanggal Terbit</label>
+              <input id="docDateInput" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="date" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Nama Klien / Pemesan</label>
+              <input id="docClientName" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="Bpk. Hendra Wijaya, M.Pd" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Sekolah / Instansi / Usaha</label>
+              <input id="docClientInstansi" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="SMAN 1 Nusantara Digital" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2.5">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">No. WhatsApp Klien</label>
+              <input id="docClientWa" data-admin-input="true" type="text" placeholder="628123456789" value="6281345678901" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Mode Pajak SPJ Instansi</label>
+              <select id="docTaxMode" data-admin-input="true" onchange="renderLiveDocumentPreview()" class="w-full px-2.5 py-2 rounded-xl bg-orange-50 border border-orange-200 text-xs font-extrabold text-orange-900">
+                <option value="NON_PAJAK">Non-Pajak (Harga Bersih)</option>
+                <option value="PPH23">Potong PPh 23 Jasa (2%)</option>
+                <option value="PPN_PPH23">SPJ Lengkap (PPN 11% + PPh 23 2%)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-600 mb-1">Nama Paket Digital / Judul Proyek Aplikasi</label>
+            <input id="docProjectTitle" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="Pembuatan Sistem CBT & E-Rapor Terpadu" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-semibold" />
+          </div>
+
+          <div>
+            <label class="block text-[11px] font-bold text-gray-600 mb-1">Rincian Fitur / Spesifikasi / Ruang Lingkup</label>
+            <textarea id="docScopeNotes" data-admin-input="true" oninput="renderLiveDocumentPreview()" rows="2" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-medium">Meliputi Source Code Full-Stack, Database Google Sheets Otomatis, Desain UI Modern Responsive PWA, Cetak PDF & Garansi Maintenance Bug 90 Hari.</textarea>
+          </div>
+
+          <div class="grid grid-cols-3 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Harga Kontrak (Rp)</label>
+              <input id="docTotalAmount" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="number" value="7500000" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Dibayar / Tagih (Rp)</label>
+              <input id="docPaidAmount" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="number" value="3750000" class="w-full px-3 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold text-orange-600" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Tahap / Termin</label>
+              <select id="docTerminStage" data-admin-input="true" onchange="renderLiveDocumentPreview()" class="w-full px-2 py-2 rounded-xl bg-white border border-gray-200 text-xs font-bold">
+                <option value="DP 50% (Termin 1)">DP 50% (Termin 1)</option>
+                <option value="Pelunasan 100% (Lunas)">Pelunasan 100%</option>
+                <option value="Pembelian Paket Digital Lunas">Paket Digital Lunas</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Rekening / Metode Bayar</label>
+              <input id="docBankInfo" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="Bank BRI / BCA / Mandiri / QRIS a.n. ManggePrompt Studio" class="w-full px-3 py-1.5 rounded-xl bg-white border border-gray-200 text-[11px] font-semibold" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-bold text-gray-600 mb-1">Penandatangan Studio</label>
+              <input id="docSignerName" data-admin-input="true" oninput="renderLiveDocumentPreview()" type="text" value="ManggePrompt Studio" class="w-full px-3 py-1.5 rounded-xl bg-white border border-gray-200 text-[11px] font-semibold" />
+            </div>
+          </div>
+
+          <!-- Toggle Cap Stempel & E-Meterai -->
+          <div class="flex items-center justify-between p-2.5 rounded-xl bg-orange-50/90 border border-orange-200 text-xs">
+            <label class="flex items-center gap-2 font-bold text-orange-950 cursor-pointer">
+              <input id="toggleOrangeStamp" type="checkbox" checked onchange="renderLiveDocumentPreview()" class="accent-orange-600 w-4 h-4 rounded" />
+              <span>Cap Basah Oranye</span>
+            </label>
+            <label class="flex items-center gap-2 font-bold text-orange-950 cursor-pointer">
+              <input id="toggleEmeterai" type="checkbox" onchange="renderLiveDocumentPreview()" class="accent-orange-600 w-4 h-4 rounded" />
+              <span>Kotak E-Meterai 10.000</span>
+            </label>
+          </div>
+
+          <div class="pt-1 flex flex-wrap gap-2">
+            <button type="button" onclick="saveAndPrintDocument()" class="flex-1 py-2.5 px-4 rounded-full pill-orange text-xs font-extrabold flex items-center justify-center gap-1.5">
+              <i class="ph-bold ph-printer text-base"></i>
+              <span>Cetak PDF (A4)</span>
+            </button>
+            <button type="button" onclick="sendDocumentViaWhatsApp()" class="py-2.5 px-4 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold flex items-center gap-1.5 shadow">
+              <i class="ph-bold ph-whatsapp-logo text-base"></i>
+              <span>Kirim WA</span>
+            </button>
+            <button type="button" data-admin-only="true" onclick="saveDocumentToDatabaseOnly(true)" class="hidden py-2.5 px-3.5 rounded-full bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 text-xs font-bold">
+              Simpan Arsip
+            </button>
+          </div>
+        </div>
+
+        <!-- Live Preview Lembar Dokumen Resmi (7 Cols) -->
+        <div class="lg:col-span-7">
+          <div id="printableDocumentArea" class="bg-white rounded-3xl p-6 sm:p-8 shadow-xl border border-gray-200 text-gray-800">
+            <!-- Dirender dinamis oleh renderLiveDocumentPreview() -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================== -->
+    <!-- VIEW 4: CEK VALIDASI DOKUMEN & DEEP-LINK QR SCANNER        -->
+    <!-- ========================================================== -->
+    <section id="view-verify" class="hidden space-y-4">
+      <div class="max-w-xl mx-auto glass-card rounded-3xl p-6 text-center space-y-4">
+        <svg class="w-14 h-14 rounded-2xl mx-auto shadow-lg"><use href="#mp-official-logo"></use></svg>
+        <h2 class="text-lg font-extrabold text-gray-900">Portal Verifikasi Keaslian Dokumen & QR Code</h2>
+        <p class="text-xs text-gray-500">
+          Masukkan Nomor Dokumen (contoh: <b>INV/MP/2026/10/001</b>) atau Kode Validasi QR (<b>QR-MP-901</b>) atau pindai langsung QR Code pada lembar Nota/Kwitansi/BAST.
+        </p>
+        <div class="flex gap-2">
+          <input id="verifyCodeInput" type="text" placeholder="Contoh: INV/MP/2026/10/001 atau QR-MP-901" class="flex-1 px-4 py-2.5 rounded-full bg-white border border-gray-200 text-xs font-bold text-gray-800 focus:outline-none focus:ring-2 focus:ring-orange-500" />
+          <button onclick="verifyDocumentCode()" class="px-5 py-2.5 rounded-full pill-orange text-xs font-extrabold">
+            Verifikasi
+          </button>
+        </div>
+        <div id="verifyResultBox" class="hidden text-left p-4 rounded-2xl border text-xs space-y-1.5"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MOBILE BOTTOM NAVIGATION BAR (DENGAN ACTIVE INDICATOR DINAMIS) -->
+  <div class="sm:hidden fixed bottom-3 left-1/2 -translate-x-1/2 z-40 w-[92%] glass-card rounded-full px-3 py-2 flex items-center justify-around shadow-2xl border border-white no-print">
+    <button id="mobNav-dashboard" onclick="switchMainTab('dashboard')" class="flex flex-col items-center gap-0.5 text-orange-600 font-extrabold text-[10px]">
+      <i class="ph-bold ph-squares-four text-lg"></i>
+      <span>Katalog</span>
+    </button>
+    <button id="mobNav-projects" onclick="switchMainTab('projects')" class="flex flex-col items-center gap-0.5 text-gray-500 font-bold text-[10px]">
+      <i class="ph-bold ph-kanban text-lg"></i>
+      <span>Proyek</span>
+    </button>
+    <button id="mobNav-documents" onclick="switchMainTab('documents')" class="flex flex-col items-center gap-0.5 text-gray-500 font-bold text-[10px]">
+      <i class="ph-bold ph-stamp text-lg"></i>
+      <span>Nota/Cap</span>
+    </button>
+    <button id="mobNav-verify" onclick="switchMainTab('verify')" class="flex flex-col items-center gap-0.5 text-gray-500 font-bold text-[10px]">
+      <i class="ph-bold ph-qr-code text-lg"></i>
+      <span>Validasi</span>
+    </button>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 1: LOGIN AKUN (RBAC ADMIN STUDIO & KLIEN)            -->
+  <!-- ========================================================== -->
+  <div id="loginModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-10 h-10 rounded-xl"><use href="#mp-official-logo"></use></svg>
+          <div>
+            <h3 class="text-base font-extrabold text-gray-900">Autentikasi ManggePrompt Studio</h3>
+            <p class="text-xs text-gray-500">Masuk sebagai Admin Studio atau Portal Klien</p>
+          </div>
+        </div>
+        <button onclick="closeLoginModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleLoginSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Username</label>
+          <input id="loginUsername" type="text" required placeholder="Masukkan username" class="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+        <div>
+          <label class="block text-xs font-bold text-gray-700 mb-1">Password</label>
+          <input id="loginPassword" type="password" required placeholder="••••••••" class="w-full px-3.5 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-full pill-orange text-xs font-extrabold">
+          Masuk & Aktifkan Hak Akses
+        </button>
+      </form>
+
+      <div class="p-3 rounded-2xl bg-orange-50/80 border border-orange-200 text-[11px] text-orange-950 space-y-1">
+        <p class="font-extrabold">Simulasi Role Cepat (Untuk Pengujian Sistem):</p>
+        <div class="flex gap-2 pt-1">
+          <button type="button" onclick="fillDemoCredentials('admin','edudigital')" class="px-2.5 py-1 rounded-lg bg-white border border-orange-200 font-bold text-[10px] hover:bg-orange-100">
+            Admin Studio (Full Access)
+          </button>
+          <button type="button" onclick="fillDemoCredentials('peserta','edudigital')" class="px-2.5 py-1 rounded-lg bg-white border border-orange-200 font-bold text-[10px] hover:bg-orange-100">
+            Portal Klien (Read-Only & Filter)
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 2: ORDER PAKET / PROYEK BARU                         -->
+  <!-- ========================================================== -->
+  <div id="orderModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-extrabold text-gray-900">Input Kontrak Pesanan & Buat Tagihan</h3>
+          <p class="text-xs text-gray-500">Otomatis menghasilkan Nomor Invoice Unik, QR Code & perhitungan pajak.</p>
+        </div>
+        <button onclick="closeOrderModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <form onsubmit="handleOrderSubmit(event)" class="space-y-3">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama Klien / Pejabat Pemesan</label>
+            <input id="orderClientName" type="text" required placeholder="Contoh: Ibu Siti Aminah, S.Pd" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama Instansi / Sekolah / Usaha</label>
+            <input id="orderInstansi" type="text" required placeholder="Contoh: SDN 1 Banawa / Dinas..." class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Nomor WhatsApp Klien (628...)</label>
+            <input id="orderClientWa" type="text" required placeholder="6281234567890" value="62812" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Skema Pajak SPJ</label>
+            <select id="orderTaxScheme" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold">
+              <option value="NON_PAJAK">Non-Pajak (Umum)</option>
+              <option value="PPH23">Potong PPh 23 Jasa (2%)</option>
+              <option value="PPN_PPH23">SPJ Dinas/BOS (PPN 11% + PPh 23 2%)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori Layanan</label>
+            <select id="orderServiceType" onchange="adjustOrderTerminDefault()" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold">
+              <option value="PRODUK DIGITAL">Paket Digital Siap Pakai (Bayar 100%)</option>
+              <option value="JASA CUSTOM">Jasa Pembuatan Aplikasi Custom (Termin/DP)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama Paket / Aplikasi</label>
+            <input id="orderProjectName" type="text" required placeholder="Contoh: Aplikasi Ujian CBT & E-Rapor" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+          </div>
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Total Harga (Rp)</label>
+            <input id="orderTotalHarga" oninput="syncOrderPaymentCalc()" type="number" required value="3500000" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold" />
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Skema Bayar</label>
+            <select id="orderTahapTermin" onchange="syncOrderPaymentCalc()" class="w-full px-2 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold">
+              <option value="Lunas">Lunas 100%</option>
+              <option value="DP 50%">DP 50% (Termin 1)</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Tagihan Awal (Rp)</label>
+            <input id="orderNominalBayar" type="number" required value="3500000" class="w-full px-3 py-2 rounded-xl bg-orange-50 border border-orange-200 text-xs font-extrabold text-orange-700" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">Link Deliverable / Source Code (Terbuka Saat Lunas)</label>
+          <input id="orderDeliverableLink" type="url" value="https://drive.google.com" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+
+        <button type="submit" class="w-full py-2.5 rounded-full pill-orange text-xs font-extrabold">
+          Simpan Kontrak & Terbitkan Invoice
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 3: TAMBAH PAKET KATALOG HOLOGRAFIK (ADMIN ONLY)      -->
+  <!-- ========================================================== -->
+  <div id="productModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between">
+        <h3 class="text-base font-extrabold text-gray-900">Tambah Paket Katalog ManggePrompt</h3>
+        <button onclick="closeProductModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+      <form onsubmit="handleAddProductSubmit(event)" class="space-y-3">
+        <div>
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">Nama Paket Aplikasi / Jasa</label>
+          <input id="prodName" type="text" required placeholder="Contoh: Aplikasi E-Absensi & Kinerja Guru" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Kategori</label>
+            <select id="prodCategory" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold">
+              <option value="PRODUK DIGITAL">PRODUK DIGITAL</option>
+              <option value="JASA CUSTOM">JASA CUSTOM</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-[11px] font-bold text-gray-700 mb-1">Harga (Rp)</label>
+            <input id="prodPrice" type="number" required value="1500000" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">Fitur Utama Singkat</label>
+          <input id="prodFeatures" type="text" required placeholder="Source Code + Database Otomatis + PWA" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">Link Repository / Source Code Produk</label>
+          <input id="prodDownloadLink" type="url" required value="https://drive.google.com" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-semibold" />
+        </div>
+        <div>
+          <label class="block text-[11px] font-bold text-gray-700 mb-1">Tema Kartu Holografik</label>
+          <select id="prodTheme" class="w-full px-3 py-2 rounded-xl bg-gray-50 border border-gray-200 text-xs font-bold">
+            <option value="holo-card-1">Hologram Pastel Pelangi</option>
+            <option value="holo-card-2">Hologram Indigo-Orange</option>
+            <option value="holo-card-3">Hologram Sunset Gold</option>
+          </select>
+        </div>
+        <button type="submit" class="w-full py-2.5 rounded-full pill-orange text-xs font-extrabold">
+          Tambahkan ke Katalog
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- MODAL 4: PANDUAN SOP TRANSAKSI & STATE WORKFLOW            -->
+  <!-- ========================================================== -->
+  <div id="guideModal" class="hidden fixed inset-0 z-50 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center p-4 no-print">
+    <div class="glass-card bg-white/95 rounded-3xl max-w-2xl w-full p-6 shadow-2xl space-y-4 max-h-[88vh] overflow-y-auto">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-2.5">
+          <svg class="w-9 h-9 rounded-xl"><use href="#mp-official-logo"></use></svg>
+          <div>
+            <h3 class="text-base font-extrabold text-gray-900">Arsitektur Sistem & SOP ManggePrompt Studio V2.5</h3>
+            <p class="text-xs text-gray-500">Alur Sistematis dari Penawaran hingga Serah Terima Source Code</p>
+          </div>
+        </div>
+        <button onclick="closeGuideModal()" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-500">
+          <i class="ph-bold ph-x"></i>
+        </button>
+      </div>
+
+      <div class="space-y-3 text-xs text-gray-700">
+        <div class="p-3.5 rounded-2xl bg-orange-50/80 border border-orange-200">
+          <p class="font-extrabold text-orange-950 mb-1">1. Proteksi Role (Admin Studio vs Portal Klien)</p>
+          <p class="text-[11px]">Pengunjung publik & klien hanya dapat melihat katalog, mengunduh dokumen resmi, dan memantau progres proyeknya sendiri. Bar pengaturan URL Google Apps Script, tombol ubah progres, dan tombol pelunasan hanya muncul saat Anda login sebagai <b>Admin Studio</b>.</p>
+        </div>
+
+        <div class="p-3.5 rounded-2xl bg-indigo-50/80 border border-indigo-200">
+          <p class="font-extrabold text-indigo-950 mb-1">2. Penguncian Siklus Dokumen (State-Driven Lifecycle)</p>
+          <ul class="list-disc list-inside space-y-1 text-[11px]">
+            <li><b>Quotation & Invoice:</b> Terbuka sejak awal pesanan dibuat.</li>
+            <li><b>BAST (Berita Acara Serah Terima):</b> Terkunci dengan peringatan apabila progres pengerjaan belum mencapai <b>100%</b>.</li>
+            <li><b>Kwitansi Lunas & Akses Download Source Code:</b> Otomatis terbuka penuh setelah sisa tagihan bernilai <b>Rp 0 (LUNAS)</b>.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toastBox" class="hidden fixed bottom-16 sm:bottom-6 right-5 z-50 glass-card bg-gray-900/95 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3 text-xs font-semibold no-print">
+    <span id="toastIcon" class="w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center">
+      <i class="ph-bold ph-check"></i>
+    </span>
+    <div>
+      <p id="toastTitle" class="font-extrabold">Berhasil</p>
+      <p id="toastDesc" class="text-[11px] text-gray-300"></p>
+    </div>
+  </div>
+
+  <!-- ========================================================== -->
+  <!-- JAVASCRIPT ENGINE V2.5 (SYSTEMATIC STATE, TAX, QR & CACHE) -->
+  <!-- ========================================================== -->
+  <script>
+    const DEFAULT_GAS_URL = "https://script.google.com/macros/s/AKfycbyq-Pl06JOCYHiPxofidQqHEX6nUand6n7kfKZUQ3x9n7F1J6pINUk4UH0LPGEcAAGMYQ/exec";
+    const LOCAL_CACHE_KEY = 'MANGGEPROMPT_STUDIO_STATE_V25';
+    let GAS_WEB_APP_URL = localStorage.getItem('MANGGEPROMPT_GAS_URL') || DEFAULT_GAS_URL;
+
+    let currentUser = null;
+    let currentDocType = 'INVOICE';
+
+    const defaultAppState = {
+      products: [
+        {
+          id_produk: 'MP-01',
+          nama_paket: 'CBT Ujian & E-Rapor Pro',
+          kategori: 'PRODUK DIGITAL',
+          harga: 1450000,
+          fitur_utama: 'Full Source Code + Auto PDF Rapor + Anti-Cheat PWA Siap Pakai',
+          link_demo: '#demo-cbt',
+          link_download: 'https://drive.google.com',
+          tema_kartu: 'holo-card-1',
+          status: 'Active',
+          nomor_kartu: 'MP-01 •••• 7729'
+        },
+        {
+          id_produk: 'MP-02',
+          nama_paket: 'Custom WebApp Sekolah/Dinas',
+          kategori: 'JASA CUSTOM',
+          harga: 7500000,
+          fitur_utama: 'Aplikasi Kustom Sesuai Request + SPK + BAST + Garansi 90 Hari',
+          link_demo: '#konsultasi',
+          link_download: 'https://drive.google.com',
+          tema_kartu: 'holo-card-2',
+          status: 'VIP Slot',
+          nomor_kartu: 'MP-02 •••• 7990'
+        },
+        {
+          id_produk: 'MP-03',
+          nama_paket: 'Dashboard Monitoring & SPJ',
+          kategori: 'PRODUK DIGITAL',
+          harga: 1850000,
+          fitur_utama: 'Monitoring Real-Time, Upload Foto Progres, & Cetak Laporan PDF',
+          link_demo: '#demo-monitoring',
+          link_download: 'https://drive.google.com',
+          tema_kartu: 'holo-card-3',
+          status: 'Ready',
+          nomor_kartu: 'MP-03 •••• 8390'
+        }
+      ],
+      transactions: [
+        {
+          no_invoice: 'INV/MP/2026/10/001',
+          id_klien: 'peserta',
+          nama_klien: 'Bpk. Hendra Wijaya, M.Pd',
+          instansi: 'SMAN 1 Nusantara Digital',
+          no_wa: '6281345678901',
+          nama_proyek: 'Pembuatan Sistem CBT & E-Rapor Terpadu',
+          jenis_layanan: 'JASA CUSTOM',
+          total_harga: 7500000,
+          nominal_dibayar: 3750000,
+          sisa_tagihan: 3750000,
+          skema_pajak: 'PPH23',
+          tahap_termin: 'DP 50%',
+          progres_persen: 75,
+          status_bayar: 'TERMIN 1 PAID',
+          tanggal_transaksi: '2026-10-15',
+          kode_validasi_qr: 'QR-MP-901',
+          link_deliverable: 'https://drive.google.com'
+        },
+        {
+          no_invoice: 'INV/MP/2026/10/002',
+          id_klien: 'peserta',
+          nama_klien: 'Ibu Hj. Ratna Dewi, S.Pd',
+          instansi: 'SDN Unggulan Harapan Bangsa',
+          no_wa: '6281298765432',
+          nama_proyek: 'Paket Aplikasi Administrasi Guru & E-Absensi',
+          jenis_layanan: 'PRODUK DIGITAL',
+          total_harga: 1850000,
+          nominal_dibayar: 1850000,
+          sisa_tagihan: 0,
+          skema_pajak: 'NON_PAJAK',
+          tahap_termin: 'Lunas',
+          progres_persen: 100,
+          status_bayar: 'LUNAS',
+          tanggal_transaksi: '2026-10-24',
+          kode_validasi_qr: 'QR-MP-902',
+          link_deliverable: 'https://drive.google.com'
+        },
+        {
+          no_invoice: 'INV/MP/2026/10/003',
+          id_klien: 'publik',
+          nama_klien: 'Ir. Bagus Pratama, M.Si',
+          instansi: 'Dinas Pendidikan & Kebudayaan',
+          no_wa: '628114567890',
+          nama_proyek: 'Sistem Monitoring Revitalisasi & Usulan Sarpras',
+          jenis_layanan: 'JASA CUSTOM',
+          total_harga: 16000000,
+          nominal_dibayar: 8000000,
+          sisa_tagihan: 8000000,
+          skema_pajak: 'PPN_PPH23',
+          tahap_termin: 'DP 50%',
+          progres_persen: 65,
+          status_bayar: 'TERMIN 1 PAID',
+          tanggal_transaksi: '2026-10-30',
+          kode_validasi_qr: 'QR-MP-903',
+          link_deliverable: 'https://drive.google.com'
+        }
+      ],
+      documents: []
+    };
+
+    let appState = JSON.parse(JSON.stringify(defaultAppState));
+
+    // ============================================================================
+    // 1. LOCAL STORAGE PERSISTENCE ENGINE
+    // ============================================================================
+    function saveStateToLocalCache() {
+      try {
+        localStorage.setItem(LOCAL_CACHE_KEY, JSON.stringify(appState));
+      } catch (e) {
+        console.warn('Gagal menyimpan cache lokal:', e);
+      }
+    }
+
+    function loadStateFromLocalCache() {
+      try {
+        const raw = localStorage.getItem(LOCAL_CACHE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (Array.isArray(parsed.products) && parsed.products.length) appState.products = parsed.products;
+          if (Array.isArray(parsed.transactions) && parsed.transactions.length) appState.transactions = parsed.transactions;
+          if (Array.isArray(parsed.documents)) appState.documents = parsed.documents;
+        }
+      } catch (e) {
+        console.warn('Cache lokal diabaikan:', e);
+      }
+    }
+
+    function resetLocalCacheData() {
+      localStorage.removeItem(LOCAL_CACHE_KEY);
+      appState = JSON.parse(JSON.stringify(defaultAppState));
+      refreshAllViews();
+      showToast('Cache Direset', 'Data dikembalikan ke pengaturan awal ManggePrompt Studio.');
+    }
+
+    // ============================================================================
+    // 2. ROLE-BASED ACCESS CONTROL (RBAC) & CLIENT ISOLATION
+    // ============================================================================
+    function isAdminUser() {
+      return currentUser && currentUser.role === 'ADMIN';
+    }
+
+    function getVisibleTransactions() {
+      if (!currentUser || currentUser.role === 'ADMIN') {
+        return appState.transactions;
+      }
+      // Jika login sebagai Klien, hanya tampilkan proyek milik klien tersebut
+      return appState.transactions.filter(tx =>
+        String(tx.id_klien).toLowerCase() === String(currentUser.username).toLowerCase() ||
+        String(tx.nama_klien).toLowerCase().includes(String(currentUser.nama_lengkap).toLowerCase())
+      );
+    }
+
+    function applyRolePermissions() {
+      const isAdmin = isAdminUser();
+
+      document.querySelectorAll('[data-admin-only="true"]').forEach(el => {
+        el.classList.toggle('hidden', !isAdmin);
+      });
+
+      document.querySelectorAll('[data-admin-input="true"]').forEach(input => {
+        input.disabled = !isAdmin;
+        input.classList.toggle('bg-gray-100', !isAdmin);
+        input.classList.toggle('cursor-not-allowed', !isAdmin);
+      });
+
+      const lockNotice = document.getElementById('docLockNotice');
+      if (lockNotice) {
+        lockNotice.textContent = isAdmin
+          ? 'Mode Admin Aktif: Anda dapat menyunting seluruh field dokumen & pajak'
+          : 'Mode Terkunci (Read-Only): Hanya Admin Studio yang dapat mengubah nominal & nomor dokumen';
+      }
+    }
+
+    // ============================================================================
+    // 3. FORMAT RUPIAH, PAJAK SPJ & TERBILANG BAHASA INDONESIA
+    // ============================================================================
+    function formatRp(num) {
+      return 'Rp ' + Math.round(Number(num || 0)).toLocaleString('id-ID');
+    }
+
+    function calculateTaxBreakdown(nominalTagih, taxMode) {
+      const gross = Number(nominalTagih || 0);
+      if (taxMode === 'PPH23') {
+        const pph23 = Math.round(gross * 0.02);
+        return {
+          label: 'Potongan PPh 23 Jasa (2%)',
+          dpp: gross,
+          ppn: 0,
+          pph23: pph23,
+          netTransfer: gross - pph23
+        };
+      }
+      if (taxMode === 'PPN_PPH23') {
+        const dpp = Math.round(gross / 1.11);
+        const ppn = gross - dpp;
+        const pph23 = Math.round(dpp * 0.02);
+        return {
+          label: 'SPJ Instansi (Include PPN 11% & PPh 23 2%)',
+          dpp: dpp,
+          ppn: ppn,
+          pph23: pph23,
+          netTransfer: gross - ppn - pph23
+        };
+      }
+      return {
+        label: 'Non-PKP / Tanpa Potongan Pajak',
+        dpp: gross,
+        ppn: 0,
+        pph23: 0,
+        netTransfer: gross
+      };
+    }
+
+    function terbilangIndonesia(nilai) {
+      nilai = Math.abs(Math.floor(Number(nilai) || 0));
+      const huruf = ['', 'Satu', 'Dua', 'Tiga', 'Empat', 'Lima', 'Enam', 'Tujuh', 'Delapan', 'Sembilan', 'Sepuluh', 'Sebelas'];
+      function konversi(n) {
+        if (n < 12) return huruf[n];
+        if (n < 20) return konversi(n - 10) + ' Belas';
+        if (n < 100) return konversi(Math.floor(n / 10)) + ' Puluh ' + konversi(n % 10);
+        if (n < 200) return 'Seratus ' + konversi(n - 100);
+        if (n < 1000) return konversi(Math.floor(n / 100)) + ' Ratus ' + konversi(n % 100);
+        if (n < 2000) return 'Seribu ' + konversi(n - 1000);
+        if (n < 1000000) return konversi(Math.floor(n / 1000)) + ' Ribu ' + konversi(n % 1000);
+        if (n < 1000000000) return konversi(Math.floor(n / 1000000)) + ' Juta ' + konversi(n % 1000000);
+        return konversi(Math.floor(n / 1000000000)) + ' Miliar ' + konversi(n % 1000000000);
+      }
+      const res = konversi(nilai).replace(/\s+/g, ' ').trim();
+      return (res ? res : 'Nol') + ' Rupiah';
+    }
+
+    // ============================================================================
+    // 4. GENERATOR QR CODE ASLI (SCANNABLE SVG) & CAP BASAH ORANYE
+    // ============================================================================
+    function generateScannableQrSvg(verifyText) {
+      try {
+        if (typeof qrcode === 'function') {
+          const qr = qrcode(0, 'M');
+          qr.addData(verifyText);
+          qr.make();
+          return qr.createSvgTag({ cellSize: 2, margin: 1, scalable: true });
+        }
+      } catch (e) {
+        console.warn('Fallback QR:', e);
+      }
+      return `<div class="w-14 h-14 bg-gray-900 text-orange-400 flex items-center justify-center font-mono text-[9px] font-bold rounded">MP-QR</div>`;
+    }
+
+    function getManggePromptOrangeStampSVG() {
+      return `
+        <svg viewBox="0 0 220 130" class="w-44 h-28 mx-auto mp-wet-stamp overflow-visible">
+          <rect x="6" y="14" width="208" height="102" rx="18" fill="rgba(255, 107, 0, 0.06)" stroke="#EA580C" stroke-width="3.5" />
+          <rect x="12" y="20" width="196" height="90" rx="13" fill="none" stroke="#EA580C" stroke-width="1.4" stroke-dasharray="5 3" />
+          <text x="110" y="39" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="11.5" fill="#C2410C" letter-spacing="1.5">
+            ★ MANGGEPROMPT STUDIO ★
+          </text>
+          <rect x="22" y="46" width="176" height="32" rx="7" fill="#EA580C" />
+          <text x="110" y="67" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="15" fill="#FFFFFF" letter-spacing="0.8">
+            MP {…} prompt.id
+          </text>
+          <text x="110" y="94" text-anchor="middle" font-family="'Plus Jakarta Sans', sans-serif" font-weight="800" font-size="9.5" fill="#9A3412" letter-spacing="1.4">
+            VERIFIED OFFICIAL DOCUMENT
+          </text>
+          <text x="110" y="105" text-anchor="middle" font-family="'JetBrains Mono', monospace" font-weight="700" font-size="7.5" fill="#EA580C" letter-spacing="0.8">
+            DIGITAL PRODUCT & WEB APP AGENCY
+          </text>
+        </svg>
+      `;
+    }
+
+    function showToast(title, desc, isSuccess = true) {
+      const box = document.getElementById('toastBox');
+      const icon = document.getElementById('toastIcon');
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastDesc').textContent = desc;
+      icon.className = isSuccess
+        ? 'w-6 h-6 rounded-full bg-orange-500 text-white flex items-center justify-center'
+        : 'w-6 h-6 rounded-full bg-rose-500 text-white flex items-center justify-center';
+      box.classList.remove('hidden');
+      setTimeout(() => box.classList.add('hidden'), 3800);
+    }
+
+    // ============================================================================
+    // 5. KONEKSI API GOOGLE APPS SCRIPT
+    // ============================================================================
+    async function callGasApi(action, payload = {}) {
+      const targetUrl = (GAS_WEB_APP_URL || "").trim();
+      if (!targetUrl) return { success: false, offline: true };
+      try {
+        const response = await fetch(targetUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify({ action: action, payload: payload })
+        });
+        return await response.json();
+      } catch (err) {
+        return { success: false, error: err.message };
+      }
+    }
+
+    function saveGasUrlConfig() {
+      const inputVal = document.getElementById('gasUrlInput').value.trim();
+      GAS_WEB_APP_URL = inputVal;
+      if (inputVal) {
+        localStorage.setItem('MANGGEPROMPT_GAS_URL', inputVal);
+        showToast('URL Tersimpan', 'Menyinkronkan data dengan Google Sheets...');
+        syncFromGasApi();
+      } else {
+        localStorage.removeItem('MANGGEPROMPT_GAS_URL');
+        updateApiStatusUI(false);
+        showToast('Cache Lokal Aktif', 'URL dikosongkan, data disimpan di memori lokal browser.');
+      }
+    }
+
+    function updateApiStatusUI(isConnected) {
+      const dot = document.getElementById('apiStatusDot');
+      const badge = document.getElementById('apiModeBadge');
+      if (isConnected) {
+        dot.className = 'w-3 h-3 rounded-full bg-emerald-400 shrink-0';
+        badge.className = 'px-2 py-0.5 rounded-full bg-emerald-500/20 text-[10px] font-bold text-emerald-300 border border-emerald-400/30';
+        badge.textContent = 'Tersinkron Google Sheets';
+      } else {
+        dot.className = 'w-3 h-3 rounded-full bg-amber-400 shrink-0 animate-pulse';
+        badge.className = 'px-2 py-0.5 rounded-full bg-orange-500/20 text-[10px] font-bold text-orange-300 border border-orange-400/30';
+        badge.textContent = 'Cache Lokal Aktif';
+      }
+    }
+
+    async function syncFromGasApi() {
+      if (!GAS_WEB_APP_URL) {
+        updateApiStatusUI(false);
+        return;
+      }
+      const res = await callGasApi('getInitialPortalData');
+      if (res && res.success && res.data) {
+        if (res.data.products && res.data.products.length) appState.products = res.data.products;
+        if (res.data.transactions && res.data.transactions.length) appState.transactions = res.data.transactions;
+        if (res.data.documents) appState.documents = res.data.documents;
+        saveStateToLocalCache();
+        refreshAllViews();
+        updateApiStatusUI(true);
+        showToast('Sinkronisasi Berhasil', 'Data terbaru dari Google Sheets berhasil dimuat.');
+      } else {
+        updateApiStatusUI(false);
+      }
+    }
+
+    // ============================================================================
+    // 6. NAVIGASI TAB & RENDER SELURUH KOMPONEN DINAMIS
+    // ============================================================================
+    function switchMainTab(tabId) {
+      ['dashboard', 'projects', 'documents', 'verify'].forEach(id => {
+        document.getElementById('view-' + id).classList.add('hidden');
+        const btn = document.getElementById('tabBtn-' + id);
+        if (btn) {
+          btn.classList.remove('pill-active');
+          btn.classList.add('bg-white/75', 'text-gray-700');
+        }
+        const mobBtn = document.getElementById('mobNav-' + id);
+        if (mobBtn) {
+          mobBtn.className = 'flex flex-col items-center gap-0.5 text-gray-500 font-bold text-[10px]';
+        }
+      });
+
+      document.getElementById('view-' + tabId).classList.remove('hidden');
+      const activeBtn = document.getElementById('tabBtn-' + tabId);
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-white/75', 'text-gray-700');
+        activeBtn.classList.add('pill-active');
+      }
+      const activeMob = document.getElementById('mobNav-' + tabId);
+      if (activeMob) {
+        activeMob.className = 'flex flex-col items-center gap-0.5 text-orange-600 font-extrabold text-[10px]';
+      }
+
+      if (tabId === 'documents') {
+        populateTransactionDropdown();
+        renderLiveDocumentPreview();
+      }
+    }
+
+    function refreshAllViews(searchQuery = '') {
+      renderHolographicCards(searchQuery);
+      renderDashboardMetricsAndTable(searchQuery);
+      renderDynamicChart();
+      renderProjectsGrid();
+      populateTransactionDropdown();
+      applyRolePermissions();
+    }
+
+    function renderHolographicCards(filterQuery = '') {
+      const container = document.getElementById('catalogCardsContainer');
+      const q = filterQuery.toLowerCase();
+      const filtered = appState.products.filter(p =>
+        p.nama_paket.toLowerCase().includes(q) ||
+        p.kategori.toLowerCase().includes(q) ||
+        p.fitur_utama.toLowerCase().includes(q)
+      );
+
+      container.innerHTML = filtered.map((item, idx) => {
+        const isDark = item.tema_kartu === 'holo-card-2';
+        const textMain = isDark ? 'text-white' : 'text-gray-900';
+        const textSub = isDark ? 'text-indigo-100' : 'text-gray-700';
+        return `
+          <div onclick="selectCatalogCardToOrder('${item.id_produk}')" class="cursor-pointer ${item.tema_kartu || 'holo-card-1'} rounded-3xl p-5 flex flex-col justify-between min-h-[195px] transition transform hover:-translate-y-1">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full bg-white/40 backdrop-blur-md text-[10px] font-extrabold ${textMain} uppercase tracking-wider">
+                  ${item.kategori}
+                </span>
+                <h3 class="text-base sm:text-lg font-extrabold ${textMain} mt-1.5 tracking-tight">${item.nama_paket}</h3>
+              </div>
+              ${idx === 0
+                ? `<div class="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-extrabold shadow">+</div>`
+                : `<div class="px-2.5 py-1 rounded-xl bg-white/80 text-gray-900 text-[10px] font-extrabold shadow-sm">${item.status}</div>`
+              }
+            </div>
+
+            <div class="my-3 flex items-center justify-between">
+              <div class="w-11 h-8 rounded-lg emv-chip flex items-center justify-center">
+                <span class="font-mono font-bold text-[10px] text-slate-700">MP{…}</span>
+              </div>
+              <p class="text-[11px] font-medium ${textSub} max-w-[72%] text-right line-clamp-2">${item.fitur_utama}</p>
+            </div>
+
+            <div class="flex items-end justify-between pt-1">
+              <div>
+                <p class="text-[10px] font-bold ${textSub} opacity-80">${item.nomor_kartu || 'MP •••• 2026'}</p>
+                <p class="text-base sm:text-lg font-extrabold ${textMain} tracking-tight">${formatRp(item.harga)}</p>
+              </div>
+              <div class="flex items-center gap-1.5">
+                <span class="px-3.5 py-1.5 rounded-full bg-white text-gray-900 font-extrabold text-[11px] shadow-sm">
+                  Pesan / Kontrak
+                </span>
+                <div class="flex -space-x-2">
+                  <span class="w-5 h-5 rounded-full bg-rose-500/90 inline-block"></span>
+                  <span class="w-5 h-5 rounded-full bg-orange-400/95 inline-block"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectCatalogCardToOrder(prodId) {
+      const prod = appState.products.find(p => p.id_produk === prodId);
+      if (!prod) return;
+      document.getElementById('orderServiceType').value = prod.kategori;
+      document.getElementById('orderProjectName').value = prod.nama_paket;
+      document.getElementById('orderTotalHarga').value = prod.harga;
+      document.getElementById('orderDeliverableLink').value = prod.link_download || 'https://drive.google.com';
+      document.getElementById('orderTahapTermin').value = prod.kategori === 'PRODUK DIGITAL' ? 'Lunas' : 'DP 50%';
+      syncOrderPaymentCalc();
+      document.getElementById('orderModal').classList.remove('hidden');
+    }
+
+    // RENDER GRAFIK SVG REAKTIF BERDASARKAN DATA TRANSAKSI AKTUAL
+    function renderDynamicChart() {
+      const container = document.getElementById('dynamicChartContainer');
+      const list = getVisibleTransactions().slice(0, 6).reverse();
+      if (!list.length) {
+        container.innerHTML = `<div class="h-full flex items-center justify-center text-xs text-gray-400">Belum ada data transaksi untuk ditampilkan</div>`;
+        return;
+      }
+
+      const maxVal = Math.max(...list.map(t => Number(t.total_harga || 1)), 10000000);
+      const colWidth = 440 / list.length;
+      let barsSvg = '';
+      let pointsArr = [];
+      let circlesSvg = '';
+      let labelsSvg = '';
+
+      list.forEach((tx, i) => {
+        const xCenter = 60 + i * colWidth + colWidth * 0.35;
+        const barH = Math.max(8, Math.round((Number(tx.total_harga || 0) / maxVal) * 115));
+        const barY = 145 - barH;
+
+        const paidH = Math.max(6, Math.round((Number(tx.nominal_dibayar || 0) / maxVal) * 115));
+        const paidY = 145 - paidH;
+
+        barsSvg += `<rect x="${xCenter - 12}" y="${barY}" width="24" height="${barH}" rx="6" fill="url(#barGrad)" />`;
+        pointsArr.push(`${xCenter},${paidY}`);
+        circlesSvg += `<circle cx="${xCenter}" cy="${paidY}" r="5" fill="#FFFFFF" stroke="#FF6B00" stroke-width="3" />`;
+
+        const shortLabel = tx.instansi.split(' ').slice(0, 2).join(' ').slice(0, 11);
+        labelsSvg += `<text x="${xCenter}" y="162" text-anchor="middle" font-size="9.5" fill="#475569" font-weight="700">${shortLabel}</text>`;
+      });
+
+      container.innerHTML = `
+        <svg viewBox="0 0 520 172" class="w-full h-full overflow-visible">
+          <defs>
+            <linearGradient id="barGrad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#5B46F6" stop-opacity="0.92" />
+              <stop offset="100%" stop-color="#818CF8" stop-opacity="0.22" />
+            </linearGradient>
+          </defs>
+          <line x1="40" y1="30" x2="505" y2="30" stroke="#CBD5E1" stroke-dasharray="3 3" stroke-width="1" />
+          <line x1="40" y1="85" x2="505" y2="85" stroke="#CBD5E1" stroke-dasharray="3 3" stroke-width="1" />
+          <line x1="40" y1="145" x2="505" y2="145" stroke="#94A3B8" stroke-width="1.2" />
+          <text x="4" y="34" font-size="9.5" fill="#64748B" font-weight="700">${Math.round(maxVal / 1000000)}jt</text>
+          <text x="4" y="89" font-size="9.5" fill="#64748B" font-weight="700">${Math.round(maxVal / 2000000)}jt</text>
+          <text x="14" y="148" font-size="9.5" fill="#64748B" font-weight="700">0</text>
+          ${barsSvg}
+          <polyline fill="none" stroke="#FF6B00" stroke-width="3" points="${pointsArr.join(' ')}" />
+          ${circlesSvg}
+          ${labelsSvg}
+        </svg>
+      `;
+    }
+
+    function renderDashboardMetricsAndTable(filterQuery = '') {
+      const visibleTx = getVisibleTransactions();
+      const totalLunas = visibleTx.reduce((acc, t) => acc + Number(t.nominal_dibayar || 0), 0);
+      const totalPiutang = visibleTx.reduce((acc, t) => acc + Number(t.sisa_tagihan || 0), 0);
+
+      document.getElementById('kpiTotalRevenue').textContent = formatRp(totalLunas);
+      document.getElementById('kpiPendingTermin').textContent = formatRp(totalPiutang);
+      document.getElementById('kpiActiveCount').textContent = visibleTx.length;
+      document.getElementById('badgeDocCount').textContent = visibleTx.length;
+
+      const tbody = document.getElementById('recentTransactionsTableBody');
+      const q = filterQuery.toLowerCase();
+      const rows = visibleTx.filter(t =>
+        t.nama_proyek.toLowerCase().includes(q) ||
+        t.nama_klien.toLowerCase().includes(q) ||
+        t.instansi.toLowerCase().includes(q) ||
+        t.no_invoice.toLowerCase().includes(q)
+      );
+
+      tbody.innerHTML = rows.map(tx => {
+        const isLunas = Number(tx.sisa_tagihan) === 0;
+        const isComplete = Number(tx.progres_persen) >= 100;
+        const dotColor = isLunas ? 'bg-emerald-500' : 'bg-orange-500';
+        const badgeClass = isLunas ? 'bg-emerald-100 text-emerald-700' : 'bg-orange-100 text-orange-800';
+        const taxBadge = tx.skema_pajak === 'PPN_PPH23' ? 'PPN+PPh23' : (tx.skema_pajak === 'PPH23' ? 'PPh 23' : 'Non-Pajak');
+
+        return `
+          <tr class="hover:bg-white/60 transition">
+            <td class="py-3 pr-3">
+              <div class="flex items-center gap-2.5">
+                <span class="w-5 h-5 rounded-full ${dotColor} text-white flex items-center justify-center text-[10px] font-bold shrink-0">
+                  ${isLunas ? '✓' : '!'}
+                </span>
+                <div>
+                  <p class="font-extrabold text-gray-900">${tx.nama_proyek}</p>
+                  <p class="text-[11px] text-gray-500">${tx.nama_klien} • ${tx.instansi} <span class="text-orange-600 font-bold">(${tx.no_invoice})</span></p>
+                </div>
+              </div>
+            </td>
+            <td class="py-3 px-3">
+              <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${badgeClass}">
+                ${tx.tahap_termin} (${tx.progres_persen}%)
+              </span>
+              <p class="text-[10px] text-gray-400 font-bold mt-0.5">${taxBadge}</p>
+            </td>
+            <td class="py-3 px-3">
+              <p class="font-extrabold text-gray-900">${formatRp(tx.total_harga)}</p>
+              <p class="text-[10px] ${isLunas ? 'text-emerald-600' : 'text-orange-600'} font-bold">
+                ${isLunas ? 'Lunas 100%' : 'Sisa: ' + formatRp(tx.sisa_tagihan)}
+              </p>
+            </td>
+            <td class="py-3 pl-3 text-right whitespace-nowrap">
+              <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'INVOICE')" class="px-2.5 py-1 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold text-[11px] mr-1">
+                Invoice
+              </button>
+              <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'BAST')" class="px-2.5 py-1 rounded-lg ${isComplete ? 'bg-slate-800 text-white' : 'bg-gray-100 text-gray-500'} font-bold text-[11px] mr-1">
+                BAST
+              </button>
+              <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'KWITANSI')" class="px-2.5 py-1 rounded-lg ${isLunas ? 'bg-emerald-100 text-emerald-800' : 'bg-orange-50 text-orange-700'} font-bold text-[11px]">
+                Kwitansi
+              </button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    // RENDER PROYEK & TERMIN GRID (DENGAN KONTROL PROGRES ADMIN & KUNCI SOURCE CODE)
+    function renderProjectsGrid() {
+      const container = document.getElementById('projectsGridContainer');
+      const isAdmin = isAdminUser();
+      const visibleTx = getVisibleTransactions();
+
+      container.innerHTML = visibleTx.map(tx => {
+        const isLunas = Number(tx.sisa_tagihan) === 0;
+        const isComplete = Number(tx.progres_persen) >= 100;
+        return `
+          <div class="glass-card rounded-3xl p-5 flex flex-col justify-between space-y-4">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${isLunas ? 'bg-emerald-100 text-emerald-800' : 'bg-orange-100 text-orange-800'}">
+                  ${tx.no_invoice} • ${tx.jenis_layanan}
+                </span>
+                <h3 class="text-base font-extrabold text-gray-900 mt-1">${tx.nama_proyek}</h3>
+                <p class="text-xs text-gray-500">${tx.nama_klien} — ${tx.instansi}</p>
+              </div>
+              <span class="text-xs font-extrabold ${isLunas ? 'text-emerald-600' : 'text-orange-600'}">
+                ${tx.tahap_termin}
+              </span>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-[11px] font-bold mb-1">
+                <span class="text-gray-600">Tahapan Pengerjaan & UAT Deployment</span>
+                <span class="text-orange-600 font-extrabold">${tx.progres_persen}%</span>
+              </div>
+              <div class="w-full h-2.5 rounded-full bg-gray-200 overflow-hidden">
+                <div class="h-full rounded-full ${isComplete ? 'bg-emerald-500' : 'pill-orange'}" style="width: ${tx.progres_persen}%"></div>
+              </div>
+              ${isAdmin ? `
+                <div class="mt-2 flex items-center gap-2 bg-orange-50/80 p-2 rounded-xl border border-orange-200">
+                  <span class="text-[10px] font-extrabold text-orange-900 whitespace-nowrap">Update Progres (Admin):</span>
+                  <input type="range" min="10" max="100" step="5" value="${tx.progres_persen}"
+                    onchange="updateProjectProgress('${tx.no_invoice}', this.value)"
+                    class="w-full accent-orange-600 cursor-pointer h-1.5" />
+                </div>
+              ` : ''}
+            </div>
+
+            <div class="grid grid-cols-3 gap-2 p-3 rounded-2xl bg-white/80 border border-white text-center">
+              <div>
+                <p class="text-[10px] text-gray-400 font-bold">Total Kontrak</p>
+                <p class="text-xs font-extrabold text-gray-900">${formatRp(tx.total_harga)}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 font-bold">Sudah Masuk</p>
+                <p class="text-xs font-extrabold text-emerald-600">${formatRp(tx.nominal_dibayar)}</p>
+              </div>
+              <div>
+                <p class="text-[10px] text-gray-400 font-bold">Sisa Termin</p>
+                <p class="text-xs font-extrabold text-orange-600">${formatRp(tx.sisa_tagihan)}</p>
+              </div>
+            </div>
+
+            <div class="flex flex-wrap items-center justify-between gap-2 pt-1">
+              <div class="flex gap-1.5">
+                <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'PENAWARAN')" class="px-2.5 py-1.5 rounded-full bg-white border border-gray-200 text-[11px] font-bold text-gray-700 hover:bg-gray-50">
+                  SPK
+                </button>
+                <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'INVOICE')" class="px-2.5 py-1.5 rounded-full bg-white border border-gray-200 text-[11px] font-bold text-gray-700 hover:bg-gray-50">
+                  Invoice
+                </button>
+                <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'BAST')" class="px-2.5 py-1.5 rounded-full bg-white border border-gray-200 text-[11px] font-bold text-gray-700 hover:bg-gray-50">
+                  BAST
+                </button>
+                <button onclick="loadTransactionToDocument('${tx.no_invoice}', 'KWITANSI')" class="px-2.5 py-1.5 rounded-full bg-white border border-gray-200 text-[11px] font-bold text-gray-700 hover:bg-gray-50">
+                  Kwitansi
+                </button>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                ${isLunas
+                  ? `<a href="${tx.link_deliverable || 'https://drive.google.com'}" target="_blank" class="px-3.5 py-1.5 rounded-full bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] font-extrabold flex items-center gap-1 shadow">
+                       <i class="ph-bold ph-download-simple"></i> Unduh Source Code
+                     </a>`
+                  : `<span class="px-3 py-1.5 rounded-full bg-gray-200 text-gray-600 text-[10px] font-bold flex items-center gap-1" title="Source Code terbuka otomatis setelah tagihan Lunas 100%">
+                       <i class="ph-bold ph-lock-key"></i> Source Code Terkunci
+                     </span>`
+                }
+                ${(!isLunas && isAdmin)
+                  ? `<button onclick="markTerminAsPaid('${tx.no_invoice}')" class="px-3.5 py-1.5 rounded-full pill-orange text-[11px] font-extrabold">
+                       Set Lunas 100%
+                     </button>`
+                  : ''
+                }
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    async function updateProjectProgress(noInvoice, newPercent) {
+      if (!isAdminUser()) return;
+      const tx = appState.transactions.find(t => t.no_invoice === noInvoice);
+      if (!tx) return;
+      tx.progres_persen = Number(newPercent);
+      saveStateToLocalCache();
+      refreshAllViews();
+      showToast('Progres Diperbarui', `Progres ${noInvoice} kini ${newPercent}%.`);
+      if (GAS_WEB_APP_URL) {
+        await callGasApi('updateTransactionProgress', { no_invoice: noInvoice, progres_persen: Number(newPercent) });
+      }
+    }
+
+    async function markTerminAsPaid(noInvoice) {
+      if (!isAdminUser()) {
+        showToast('Akses Ditolak', 'Hanya Admin Studio yang dapat memverifikasi pelunasan.', false);
+        return;
+      }
+      const tx = appState.transactions.find(t => t.no_invoice === noInvoice);
+      if (!tx) return;
+      tx.nominal_dibayar = tx.total_harga;
+      tx.sisa_tagihan = 0;
+      tx.tahap_termin = 'Lunas';
+      tx.progres_persen = 100;
+      tx.status_bayar = 'LUNAS';
+
+      saveStateToLocalCache();
+      refreshAllViews();
+      showToast('Pelunasan Diverifikasi!', `Proyek ${noInvoice} LUNAS 100%. Kwitansi Lunas & Source Code kini terbuka.`);
+
+      if (GAS_WEB_APP_URL) {
+        await callGasApi('updateTransactionStatus', { no_invoice: noInvoice });
+      }
+    }
+
+    // ============================================================================
+    // 7. GENERATOR DOKUMEN RESMI DENGAN STATE-LOCKING & PAJAK SPJ
+    // ============================================================================
+    function populateTransactionDropdown() {
+      const sel = document.getElementById('docSelectTransaction');
+      const list = getVisibleTransactions();
+      sel.innerHTML = list.map(t =>
+        `<option value="${t.no_invoice}">${t.no_invoice} — ${t.nama_klien} (${t.nama_proyek})</option>`
+      ).join('');
+    }
+
+    function fillDocFromTransaction(noInvoice) {
+      const tx = appState.transactions.find(t => t.no_invoice === noInvoice);
+      if (!tx) return;
+      const prefixMap = { INVOICE: 'INV/MP', KWITANSI: 'KWT/MP', PENAWARAN: 'QUO/MP', BAST: 'BAST/MP' };
+      const suffix = tx.no_invoice.split('/').slice(2).join('/');
+      document.getElementById('docNumberInput').value = `${prefixMap[currentDocType]}/${suffix}`;
+      document.getElementById('docDateInput').value = tx.tanggal_transaksi;
+      document.getElementById('docClientName').value = tx.nama_klien;
+      document.getElementById('docClientInstansi').value = tx.instansi;
+      document.getElementById('docClientWa').value = tx.no_wa || '';
+      document.getElementById('docProjectTitle').value = tx.nama_proyek;
+      document.getElementById('docTotalAmount').value = tx.total_harga;
+      document.getElementById('docPaidAmount').value = tx.nominal_dibayar;
+      document.getElementById('docTaxMode').value = tx.skema_pajak || 'NON_PAJAK';
+      document.getElementById('docTerminStage').value = Number(tx.sisa_tagihan) === 0 ? 'Pelunasan 100% (Lunas)' : 'DP 50% (Termin 1)';
+      renderLiveDocumentPreview();
+    }
+
+    function selectDocType(type) {
+      currentDocType = type;
+      const numField = document.getElementById('docNumberInput');
+      const prefixMap = { INVOICE: 'INV/MP', KWITANSI: 'KWT/MP', PENAWARAN: 'QUO/MP', BAST: 'BAST/MP' };
+      const currentVal = numField.value || 'INV/MP/2026/10/001';
+      const parts = currentVal.split('/');
+      if (parts.length >= 4) {
+        numField.value = `${prefixMap[type]}/${parts.slice(2).join('/')}`;
+      }
+
+      ['INVOICE', 'KWITANSI', 'PENAWARAN', 'BAST'].forEach(t => {
+        const btn = document.getElementById('docTypeBtn-' + t);
+        if (t === type) {
+          btn.className = 'doc-type-btn pill-active py-2 px-3 rounded-xl text-xs font-bold text-center';
+        } else {
+          btn.className = 'doc-type-btn bg-white text-gray-700 py-2 px-3 rounded-xl text-xs font-bold text-center border border-gray-200';
+        }
+      });
+      renderLiveDocumentPreview();
+    }
+
+    function openQuickDocGenerator(type) {
+      switchMainTab('documents');
+      selectDocType(type);
+    }
+
+    function loadTransactionToDocument(noInvoice, docType) {
+      switchMainTab('documents');
+      document.getElementById('docSelectTransaction').value = noInvoice;
+      currentDocType = docType;
+      fillDocFromTransaction(noInvoice);
+      selectDocType(docType);
+    }
+
+    function renderLiveDocumentPreview() {
+      const selectedInv = document.getElementById('docSelectTransaction').value;
+      const linkedTx = appState.transactions.find(t => t.no_invoice === selectedInv);
+
+      const docNo = document.getElementById('docNumberInput').value || 'INV/MP/2026/10/001';
+      const docDate = document.getElementById('docDateInput').value || '2026-10-31';
+      const clientName = document.getElementById('docClientName').value || 'Nama Klien';
+      const clientInstansi = document.getElementById('docClientInstansi').value || 'Instansi Klien';
+      const projectTitle = document.getElementById('docProjectTitle').value || 'Pembuatan Aplikasi Web';
+      const scopeNotes = document.getElementById('docScopeNotes').value || '';
+      const totalAmount = Number(document.getElementById('docTotalAmount').value || 0);
+      const paidAmount = Number(document.getElementById('docPaidAmount').value || 0);
+      const sisaAmount = Math.max(0, totalAmount - paidAmount);
+      const terminStage = document.getElementById('docTerminStage').value;
+      const taxMode = document.getElementById('docTaxMode').value || 'NON_PAJAK';
+      const bankInfo = document.getElementById('docBankInfo').value || 'Bank BRI / BCA / Mandiri / QRIS a.n. ManggePrompt Studio';
+      const signerName = document.getElementById('docSignerName').value || 'ManggePrompt Studio';
+      let showStamp = document.getElementById('toggleOrangeStamp').checked;
+      const showEmeterai = document.getElementById('toggleEmeterai').checked;
+
+      // STATE-MACHINE VALIDATION WARNINGS
+      const warnBox = document.getElementById('docWorkflowWarning');
+      warnBox.classList.add('hidden');
+      let watermarkDraft = '';
+
+      if (currentDocType === 'BAST' && linkedTx && Number(linkedTx.progres_persen) < 100) {
+        warnBox.classList.remove('hidden');
+        warnBox.innerHTML = `<i class="ph-bold ph-warning"></i> <b>Perhatian Siklus Sistem:</b> Progres proyek ini baru <b>${linkedTx.progres_persen}%</b> (belum 100%). Lembar BAST ditandai sebagai <b>DRAFT PREVIEW</b> dan cap basah dinonaktifkan hingga progres 100%.`;
+        showStamp = false;
+        watermarkDraft = `<div class="mb-4 p-2.5 rounded-xl bg-amber-100 border border-amber-300 text-amber-900 text-center text-xs font-extrabold">DRAFT BAST — PROGRES PENGERJAAN BELUM 100%</div>`;
+      } else if (currentDocType === 'KWITANSI' && sisaAmount > 0) {
+        warnBox.classList.remove('hidden');
+        warnBox.innerHTML = `<i class="ph-bold ph-info"></i> <b>Status Termin:</b> Masih terdapat sisa tagihan <b>${formatRp(sisaAmount)}</b>. Kwitansi ini otomatis diterbitkan sebagai <b>Bukti Pembayaran Termin 1 (DP)</b>, bukan Kwitansi Pelunasan Akhir.`;
+      }
+
+      const qrCodeId = linkedTx ? linkedTx.kode_validasi_qr : ('QR-MP-' + docNo.replace(/[^0-9]/g, '').slice(-3));
+      const baseOrigin = window.location.origin && window.location.origin !== 'null'
+        ? `${window.location.origin}${window.location.pathname}`
+        : 'https://manggeprompt.id/';
+      const verifyUrl = `${baseOrigin}?verify=${encodeURIComponent(linkedTx ? linkedTx.no_invoice : docNo)}`;
+      const qrSvgMarkup = generateScannableQrSvg(verifyUrl);
+      const taxCalc = calculateTaxBreakdown(paidAmount, taxMode);
+
+      const headerTitles = {
+        INVOICE: { title: 'INVOICE / NOTA TAGIHAN RESMI', badge: 'TAGIHAN PEMBAYARAN', color: 'text-orange-800 bg-orange-50 border-orange-300' },
+        KWITANSI: { title: sisaAmount === 0 ? 'KWITANSI BUKTI PELUNASAN SAH (100%)' : 'KWITANSI BUKTI PEMBAYARAN TERMIN', badge: sisaAmount === 0 ? 'LUNAS 100%' : 'TERMIN 1 / DP DITERIMA', color: 'text-emerald-800 bg-emerald-50 border-emerald-300' },
+        PENAWARAN: { title: 'SURAT PENAWARAN HARGA & SPK', badge: 'QUOTATION & KONTRAK KERJA', color: 'text-indigo-800 bg-indigo-50 border-indigo-300' },
+        BAST: { title: 'BERITA ACARA SERAH TERIMA PEKERJAAN (BAST)', badge: 'SERAH TERIMA APLIKASI & SOURCE CODE', color: 'text-slate-800 bg-slate-100 border-slate-300' }
+      };
+      const meta = headerTitles[currentDocType];
+
+      const area = document.getElementById('printableDocumentArea');
+      area.innerHTML = `
+        ${watermarkDraft}
+        <!-- KOP SURAT RESMI MANGGEPROMPT STUDIO -->
+        <div class="flex flex-wrap items-start justify-between gap-4 pb-5 border-b-2 border-gray-900">
+          <div class="flex items-center gap-3.5">
+            <svg class="w-14 h-14 rounded-2xl shadow-md shrink-0">
+              <use href="#mp-official-logo"></use>
+            </svg>
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg sm:text-xl font-extrabold tracking-tight text-gray-900">
+                  MANGGE<span class="text-[#FF6B00]">PROMPT</span> STUDIO
+                </h2>
+                <span class="px-2 py-0.5 rounded bg-gray-900 text-[#FF7A00] font-mono text-[10px] font-bold">
+                  manggeprompt.id
+                </span>
+              </div>
+              <p class="text-[11px] font-semibold text-gray-600">Digital Product Packages, Custom Web Application & IT Consultant</p>
+              <p class="text-[10px] text-gray-500">Web: www.manggeprompt.id • Email: info@manggeprompt.my.id • Indonesia</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold border ${meta.color}">
+              ${meta.badge}
+            </span>
+            <p class="text-xs font-extrabold text-gray-900 mt-1">No: ${docNo}</p>
+            <p class="text-[11px] text-gray-500">Tanggal: ${docDate}</p>
+          </div>
+        </div>
+
+        <!-- JUDUL DOKUMEN -->
+        <div class="my-5 text-center">
+          <h3 class="text-base sm:text-lg font-extrabold tracking-wide text-gray-900 underline decoration-orange-500 decoration-2 underline-offset-4">
+            ${meta.title}
+          </h3>
+        </div>
+
+        <!-- INFO KLIEN -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 p-4 rounded-2xl bg-gray-50 border border-gray-200 text-xs mb-5">
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Kepada Yth. / Pihak Klien:</p>
+            <p class="font-extrabold text-gray-900 text-sm mt-0.5">${clientName}</p>
+            <p class="font-semibold text-gray-600">${clientInstansi}</p>
+          </div>
+          <div class="sm:text-right">
+            <p class="text-[10px] font-bold text-gray-400 uppercase">Status Termin & Perpajakan:</p>
+            <p class="font-extrabold text-[#EA580C] text-sm mt-0.5">${terminStage}</p>
+            <p class="text-[11px] text-gray-600 font-medium">${taxCalc.label}</p>
+          </div>
+        </div>
+
+        <!-- ISI DINAMIS BERDASARKAN TIPE DOKUMEN -->
+        ${currentDocType === 'KWITANSI' ? `
+          <div class="space-y-2.5 text-xs border-2 border-orange-200 rounded-2xl p-4 mb-5 bg-orange-50/30">
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+              <span class="font-bold text-gray-500">Telah Terima Dari:</span>
+              <span class="sm:col-span-2 font-extrabold text-gray-900">${clientName} — ${clientInstansi}</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+              <span class="font-bold text-gray-500">Uang Sejumlah:</span>
+              <span class="sm:col-span-2 font-extrabold italic text-orange-900 bg-orange-100/80 px-2.5 py-1 rounded-lg border border-orange-200">
+                # ${terbilangIndonesia(paidAmount)} #
+              </span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-1">
+              <span class="font-bold text-gray-500">Untuk Pembayaran:</span>
+              <span class="sm:col-span-2 font-bold text-gray-900">${projectTitle} (${terminStage})</span>
+            </div>
+          </div>
+        ` : ''}
+
+        ${currentDocType === 'PENAWARAN' ? `
+          <div class="space-y-2 text-xs leading-relaxed border border-indigo-200 rounded-2xl p-4 mb-5 bg-indigo-50/25">
+            <p>Dengan hormat, bersama dokumen ini <b>ManggePrompt Studio (manggeprompt.id)</b> mengajukan penawaran resmi beserta ketentuan Surat Perintah Kerja (SPK):</p>
+            <ul class="list-disc list-inside text-[11px] text-gray-700 space-y-1">
+              <li><b>Tahapan Pembayaran:</b> Paket Digital Siap Pakai dibayar 100% di muka; Jasa Custom Aplikasi melalui Termin 1 (DP 50%) dan Pelunasan 50% setelah BAST.</li>
+              <li><b>Garansi Pemeliharaan:</b> Garansi perbaikan <i>bug/error</i> gratis selama 90 hari kalender sejak tanggal BAST.</li>
+            </ul>
+          </div>
+        ` : ''}
+
+        ${currentDocType === 'BAST' ? `
+          <div class="space-y-2.5 text-xs leading-relaxed border border-gray-200 rounded-2xl p-4 mb-5">
+            <p>Pada hari ini tanggal <b>${docDate}</b>, kedua belah pihak menyatakan bahwa pekerjaan pengembangan dan penyediaan sistem aplikasi oleh <b>ManggePrompt Studio</b>:</p>
+            <div class="p-3 rounded-xl bg-orange-50/50 border border-orange-200">
+              <p class="font-extrabold text-gray-900">${projectTitle}</p>
+              <p class="text-[11px] text-gray-600 mt-1">${scopeNotes}</p>
+            </div>
+            <p>Telah selesai dikerjakan dan diuji coba dengan baik sesuai spesifikasi kepada Pihak Klien (<b>${clientInstansi}</b>).</p>
+          </div>
+        ` : ''}
+
+        <!-- TABEL RINCIAN HARGA -->
+        <table class="w-full text-left border-collapse mb-5 text-xs">
+          <thead>
+            <tr class="bg-[#0B0D13] text-white">
+              <th class="py-2.5 px-3 rounded-tl-xl">Deskripsi Paket Digital / Jasa Aplikasi</th>
+              <th class="py-2.5 px-3 text-right">Nilai Kontrak</th>
+              <th class="py-2.5 px-3 text-right rounded-tr-xl">Nominal ${currentDocType === 'KWITANSI' ? 'Diterima' : 'Tagihan'}</th>
+            </tr>
+          </thead>
+          <tbody class="border-b border-gray-200">
+            <tr>
+              <td class="py-3 px-3">
+                <p class="font-extrabold text-gray-900">${projectTitle}</p>
+                <p class="text-[11px] text-gray-500 mt-0.5">${scopeNotes}</p>
+              </td>
+              <td class="py-3 px-3 text-right font-bold text-gray-700">${formatRp(totalAmount)}</td>
+              <td class="py-3 px-3 text-right font-extrabold text-[#EA580C]">${formatRp(paidAmount)}</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- RINGKASAN TOTAL, PERHITUNGAN PAJAK SPJ & REKENING PEMBAYARAN -->
+        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center mb-6">
+          <div class="sm:col-span-6 p-3.5 rounded-2xl bg-gray-50 border border-gray-200 text-[11px] space-y-1">
+            <p class="font-extrabold text-gray-800">Rekening & Metode Pembayaran Resmi:</p>
+            <p class="text-gray-700 font-semibold">• ${bankInfo}</p>
+            <p class="text-[10px] text-gray-500 italic">Terbilang Tagihan: # ${terbilangIndonesia(paidAmount)} #</p>
+          </div>
+          <div class="sm:col-span-6 p-4 rounded-2xl bg-orange-50/70 border border-orange-200 text-xs space-y-1">
+            <div class="flex justify-between">
+              <span class="text-gray-600 font-semibold">Total Nilai Proyek:</span>
+              <span class="font-bold text-gray-900">${formatRp(totalAmount)}</span>
+            </div>
+            <div class="flex justify-between">
+              <span class="text-orange-950 font-extrabold">${currentDocType === 'KWITANSI' ? 'Nominal Bruto:' : 'Tagihan Termin Ini:'}</span>
+              <span class="font-extrabold text-[#EA580C]">${formatRp(paidAmount)}</span>
+            </div>
+            ${taxMode !== 'NON_PAJAK' ? `
+              <div class="border-t border-orange-200/80 pt-1 mt-1 space-y-0.5 text-[11px]">
+                <div class="flex justify-between text-gray-600">
+                  <span>DPP (Dasar Pengenaan Pajak):</span>
+                  <span class="font-semibold">${formatRp(taxCalc.dpp)}</span>
+                </div>
+                ${taxCalc.ppn > 0 ? `
+                  <div class="flex justify-between text-gray-600">
+                    <span>PPN (11%):</span>
+                    <span class="font-semibold">${formatRp(taxCalc.ppn)}</span>
+                  </div>
+                ` : ''}
+                <div class="flex justify-between text-rose-700">
+                  <span>Potongan PPh 23 Jasa (2%):</span>
+                  <span class="font-bold">- ${formatRp(taxCalc.pph23)}</span>
+                </div>
+                <div class="flex justify-between text-emerald-800 font-extrabold pt-0.5">
+                  <span> Bersih Diterima Studio (Net):</span>
+                  <span>${formatRp(taxCalc.netTransfer)}</span>
+                </div>
+              </div>
+            ` : ''}
+            <div class="flex justify-between border-t border-orange-200 pt-1">
+              <span class="text-gray-600 font-semibold">Sisa Tagihan Kontrak:</span>
+              <span class="font-extrabold ${sisaAmount === 0 ? 'text-emerald-600' : 'text-rose-600'}">${formatRp(sisaAmount)}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- FOOTER TANDA TANGAN, CAP BASAH ORANYE & QR CODE ASLI -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 items-end pt-4 border-t border-dashed border-gray-300 text-xs">
+          <div>
+            <p class="text-[10px] font-bold text-gray-400 mb-1">Scan QR Validasi Dokumen:</p>
+            <div class="inline-flex items-center gap-2.5 p-2 rounded-xl border border-gray-200 bg-white">
+              <div class="w-16 h-16 flex items-center justify-center overflow-hidden rounded border border-gray-200 p-0.5">
+                ${qrSvgMarkup}
+              </div>
+              <div class="text-[10px]">
+                <p class="font-extrabold text-gray-900">${qrCodeId}</p>
+                <p class="text-emerald-600 font-bold">TERVERIFIKASI</p>
+                <p class="text-gray-400">manggeprompt.id</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="text-center hidden sm:block">
+            <p class="text-[11px] font-semibold text-gray-500 mb-16">Pihak Klien / Penerima,</p>
+            <p class="font-extrabold text-gray-800 underline">${clientName}</p>
+            <p class="text-[10px] text-gray-500">${clientInstansi}</p>
+          </div>
+
+          <div class="text-center relative">
+            <p class="text-[11px] font-semibold text-gray-500 mb-1">Hormat Kami,</p>
+            <div class="relative min-h-[96px] flex items-center justify-center">
+              ${showEmeterai ? `
+                <div class="w-16 h-16 border-2 border-dashed border-teal-600 bg-teal-50/60 rounded-lg flex flex-col items-center justify-center text-[8px] font-bold text-teal-800 mr-1 shrink-0">
+                  <span>E-METERAI</span>
+                  <span class="text-[10px] font-extrabold">10.000</span>
+                </div>
+              ` : ''}
+              ${showStamp ? getManggePromptOrangeStampSVG() : '<div class="h-20 flex items-center justify-center text-[10px] text-gray-400 italic">(Menunggu Verifikasi Final)</div>'}
+            </div>
+            <p class="font-extrabold text-gray-900 underline mt-1">${signerName}</p>
+            <p class="text-[10px] font-semibold text-[#EA580C]">Founder & Lead Developer • manggeprompt.id</p>
+          </div>
+        </div>
+      `;
+    }
+
+    function saveAndPrintDocument() {
+      saveDocumentToDatabaseOnly(false);
+      window.print();
+    }
+
+    async function saveDocumentToDatabaseOnly(showNotif = true) {
+      const docObj = {
+        no_dokumen: document.getElementById('docNumberInput').value,
+        jenis_dokumen: currentDocType,
+        no_invoice_ref: document.getElementById('docSelectTransaction').value || '-',
+        penerima: document.getElementById('docClientName').value + ' - ' + document.getElementById('docClientInstansi').value,
+        nominal: Number(document.getElementById('docPaidAmount').value || 0),
+        skema_pajak: document.getElementById('docTaxMode').value,
+        keterangan: document.getElementById('docProjectTitle').value,
+        tanggal_terbit: document.getElementById('docDateInput').value,
+        kode_validasi_qr: 'QR-MP-' + document.getElementById('docNumberInput').value.replace(/[^0-9]/g, '').slice(-3)
+      };
+
+      appState.documents.unshift(docObj);
+      saveStateToLocalCache();
+
+      if (showNotif) {
+        showToast('Arsip Tersimpan', `Dokumen ${docObj.no_dokumen} berhasil dicatat.`);
+      }
+      if (GAS_WEB_APP_URL) {
+        await callGasApi('saveOfficialDocument', docObj);
+      }
+    }
+
+    // KIRIM RINGKASAN DOKUMEN & LINK VALIDASI KE WHATSAPP KLIEN
+    function sendDocumentViaWhatsApp() {
+      const rawPhone = (document.getElementById('docClientWa').value || '').replace(/[^0-9]/g, '');
+      const docNo = document.getElementById('docNumberInput').value;
+      const clientName = document.getElementById('docClientName').value;
+      const clientInstansi = document.getElementById('docClientInstansi').value;
+      const projectTitle = document.getElementById('docProjectTitle').value;
+      const paidAmount = formatRp(document.getElementById('docPaidAmount').value);
+      const terminStage = document.getElementById('docTerminStage').value;
+      const selectedInv = document.getElementById('docSelectTransaction').value || docNo;
+
+      const baseOrigin = window.location.origin && window.location.origin !== 'null'
+        ? `${window.location.origin}${window.location.pathname}`
+        : 'https://manggeprompt.id/';
+      const verifyUrl = `${baseOrigin}?verify=${encodeURIComponent(selectedInv)}`;
+
+      const text = `*MANGGEPROMPT STUDIO (manggeprompt.id)*\n` +
+        `----------------------------------------\n` +
+        `Yth. *${clientName}*\n` +
+        `(${clientInstansi})\n\n` +
+        `Berikut kami sampaikan rincian dokumen resmi *${currentDocType}*:\n` +
+        `• *No. Dokumen:* ${docNo}\n` +
+        `• *Pekerjaan/Paket:* ${projectTitle}\n` +
+        `• *Status/Termin:* ${terminStage}\n` +
+        `• *Nominal:* ${paidAmount}\n\n` +
+        `Cek validasi keaslian dokumen secara online melalui tautan resmi berikut:\n` +
+        `${verifyUrl}\n\n` +
+        `Terima kasih atas kepercayaan Anda bersama *ManggePrompt Studio*.`;
+
+      const targetUrl = `https://wa.me/${rawPhone}?text=${encodeURIComponent(text)}`;
+      window.open(targetUrl, '_blank');
+    }
+
+    // ============================================================================
+    // 8. VERIFIKASI QR CODE & DEEP-LINK URL (?verify=...)
+    // ============================================================================
+    function verifyDocumentCode() {
+      const code = document.getElementById('verifyCodeInput').value.trim().toUpperCase();
+      const box = document.getElementById('verifyResultBox');
+      if (!code) return;
+
+      const suffixDigits = code.replace(/[^0-9]/g, '').slice(-3);
+      const foundTx = appState.transactions.find(t =>
+        t.no_invoice.toUpperCase() === code ||
+        (t.kode_validasi_qr && t.kode_validasi_qr.toUpperCase() === code) ||
+        (suffixDigits && t.no_invoice.endsWith(suffixDigits))
+      );
+
+      box.classList.remove('hidden');
+      if (foundTx) {
+        const isLunas = Number(foundTx.sisa_tagihan) === 0;
+        box.className = 'text-left p-4 rounded-2xl bg-emerald-50 border border-emerald-300 text-xs space-y-1.5 text-emerald-950';
+        box.innerHTML = `
+          <p class="font-extrabold text-emerald-700 flex items-center gap-1.5 text-sm">
+            <i class="ph-bold ph-seal-check text-lg"></i> SERTIFIKAT DOKUMEN SAH — MANGGEPROMPT STUDIO
+          </p>
+          <p><b>Nomor Kontrak/Invoice:</b> ${foundTx.no_invoice} (${foundTx.kode_validasi_qr})</p>
+          <p><b>Pihak Klien / Instansi:</b> ${foundTx.nama_klien} — ${foundTx.instansi}</p>
+          <p><b>Nama Proyek / Paket:</b> ${foundTx.nama_proyek}</p>
+          <p><b>Progres Pengerjaan:</b> ${foundTx.progres_persen}%</p>
+          <p><b>Status Pembayaran:</b> <span class="px-2 py-0.5 rounded bg-emerald-200 font-extrabold">${foundTx.tahap_termin}</span> (Masuk: ${formatRp(foundTx.nominal_dibayar)} dari ${formatRp(foundTx.total_harga)})</p>
+          <div class="pt-2">
+            <button onclick="loadTransactionToDocument('${foundTx.no_invoice}', '${isLunas ? 'KWITANSI' : 'INVOICE'}')" class="px-3.5 py-1.5 rounded-full bg-emerald-700 text-white font-extrabold text-[11px]">
+              Buka Lembar Dokumen Resmi
+            </button>
+          </div>
+        `;
+      } else {
+        box.className = 'text-left p-4 rounded-2xl bg-rose-50 border border-rose-200 text-xs space-y-1 text-rose-950';
+        box.innerHTML = `
+          <p class="font-extrabold text-rose-700">Dokumen Tidak Terdaftar di Database</p>
+          <p>Pastikan nomor Invoice (misal: <b>INV/MP/2026/10/001</b>) atau kode QR (<b>QR-MP-901</b>) sesuai dengan yang tertera pada dokumen.</p>
+        `;
+      }
+    }
+
+    function checkUrlVerificationParam() {
+      const params = new URLSearchParams(window.location.search);
+      const verifyCode = params.get('verify');
+      if (verifyCode) {
+        switchMainTab('verify');
+        const input = document.getElementById('verifyCodeInput');
+        if (input) {
+          input.value = verifyCode;
+          verifyDocumentCode();
+        }
+      }
+    }
+
+    // ============================================================================
+    // 9. AUTH LOGIN & FORM HANDLERS
+    // ============================================================================
+    function openLoginModal() {
+      if (currentUser) {
+        currentUser = null;
+        document.getElementById('roleBadgeHeader').textContent = 'Mode Publik';
+        document.getElementById('roleBadgeHeader').className = 'px-2.5 py-0.5 text-[10px] font-bold rounded-full bg-orange-100 text-orange-800 border border-orange-200';
+        document.getElementById('authLabelText').textContent = 'Login Klien / Admin';
+        document.getElementById('tableFilterSubtitle').textContent = 'Menampilkan proyek aktif beserta status verifikasi pembayaran';
+        refreshAllViews();
+        showToast('Logout Berhasil', 'Anda kembali ke mode pengunjung publik.');
+        return;
+      }
+      document.getElementById('loginModal').classList.remove('hidden');
+    }
+
+    function closeLoginModal() {
+      document.getElementById('loginModal').classList.add('hidden');
+    }
+
+    function fillDemoCredentials(u, p) {
+      document.getElementById('loginUsername').value = u;
+      document.getElementById('loginPassword').value = p;
+    }
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const u = document.getElementById('loginUsername').value.trim();
+      const p = document.getElementById('loginPassword').value.trim();
+
+      if (GAS_WEB_APP_URL) {
+        const res = await callGasApi('verifyLogin', { username: u, password: p });
+        if (res && res.success) {
+          setLoggedInUser(res.user);
+          return;
+        } else if (res && !res.offline) {
+          showToast('Login Ditolak', res.message || 'Kredensial tidak valid.', false);
+          return;
+        }
+      }
+
+      if (u === 'admin' && p === 'edudigital') {
+        setLoggedInUser({ username: 'admin', role: 'ADMIN', nama_lengkap: 'Founder ManggePrompt', instansi_klien: 'ManggePrompt Studio' });
+      } else if (u === 'peserta' && p === 'edudigital') {
+        setLoggedInUser({ username: 'peserta', role: 'PESERTA', nama_lengkap: 'Bpk. Hendra Wijaya, M.Pd', instansi_klien: 'SMAN 1 Nusantara Digital' });
+      } else {
+        showToast('Login Gagal', 'Username atau password salah.', false);
+      }
+    }
+
+    function setLoggedInUser(userObj) {
+      currentUser = userObj;
+      closeLoginModal();
+      const badge = document.getElementById('roleBadgeHeader');
+      if (userObj.role === 'ADMIN') {
+        badge.textContent = 'Admin Studio (Full Access)';
+        badge.className = 'px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-gray-900 text-orange-400 border border-orange-500/40';
+        document.getElementById('tableFilterSubtitle').textContent = 'Mode Admin: Menampilkan seluruh proyek & kontrol mutasi penuh';
+      } else {
+        badge.textContent = 'Portal Klien Terverifikasi';
+        badge.className = 'px-2.5 py-0.5 text-[10px] font-extrabold rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300';
+        document.getElementById('tableFilterSubtitle').textContent = `Filter Aktif: Hanya menampilkan proyek milik ${userObj.nama_lengkap}`;
+      }
+      document.getElementById('authLabelText').textContent = userObj.nama_lengkap + ' (Keluar)';
+      refreshAllViews();
+      showToast('Akses ' + userObj.role + ' Aktif', 'Selamat datang, ' + userObj.nama_lengkap);
+    }
+
+    // ORDER MODAL LOGIC DENGAN PENOMORAN ANTI-DUPLIKAT
+    function openOrderModal(defaultService = 'Jasa Custom Aplikasi') {
+      document.getElementById('orderProjectName').value = defaultService;
+      syncOrderPaymentCalc();
+      document.getElementById('orderModal').classList.remove('hidden');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('orderModal').classList.add('hidden');
+    }
+
+    function adjustOrderTerminDefault() {
+      const cat = document.getElementById('orderServiceType').value;
+      document.getElementById('orderTahapTermin').value = cat === 'PRODUK DIGITAL' ? 'Lunas' : 'DP 50%';
+      syncOrderPaymentCalc();
+    }
+
+    function syncOrderPaymentCalc() {
+      const total = Number(document.getElementById('orderTotalHarga').value || 0);
+      const skema = document.getElementById('orderTahapTermin').value;
+      document.getElementById('orderNominalBayar').value = skema === 'DP 50%' ? Math.round(total * 0.5) : total;
+    }
+
+    function generateUniqueInvoiceNumber() {
+      const now = new Date();
+      const yyyy = now.getFullYear();
+      const mm = String(now.getMonth() + 1).padStart(2, '0');
+      const maxSeq = appState.transactions.reduce((max, t) => {
+        const parts = String(t.no_invoice).split('/');
+        const num = parseInt(parts[parts.length - 1], 10);
+        return !isNaN(num) && num > max ? num : max;
+      }, 0);
+      const nextSeq = String(maxSeq + 1).padStart(3, '0');
+      return {
+        invNo: `INV/MP/${yyyy}/${mm}/${nextSeq}`,
+        qrCode: `QR-MP-9${nextSeq}`
+      };
+    }
+
+    async function handleOrderSubmit(e) {
+      e.preventDefault();
+      const generated = generateUniqueInvoiceNumber();
+      const total = Number(document.getElementById('orderTotalHarga').value || 0);
+      const paid = Number(document.getElementById('orderNominalBayar').value || 0);
+      const sisa = Math.max(0, total - paid);
+
+      const newTx = {
+        no_invoice: generated.invNo,
+        id_klien: currentUser ? currentUser.username : 'publik',
+        nama_klien: document.getElementById('orderClientName').value,
+        instansi: document.getElementById('orderInstansi').value,
+        no_wa: document.getElementById('orderClientWa').value,
+        nama_proyek: document.getElementById('orderProjectName').value,
+        jenis_layanan: document.getElementById('orderServiceType').value,
+        total_harga: total,
+        nominal_dibayar: paid,
+        sisa_tagihan: sisa,
+        skema_pajak: document.getElementById('orderTaxScheme').value,
+        tahap_termin: document.getElementById('orderTahapTermin').value,
+        progres_persen: sisa === 0 ? 100 : 25,
+        status_bayar: sisa === 0 ? 'LUNAS' : 'TERMIN 1 PAID',
+        tanggal_transaksi: new Date().toISOString().slice(0, 10),
+        kode_validasi_qr: generated.qrCode,
+        link_deliverable: document.getElementById('orderDeliverableLink').value || 'https://drive.google.com'
+      };
+
+      appState.transactions.unshift(newTx);
+      saveStateToLocalCache();
+      closeOrderModal();
+      refreshAllViews();
+      loadTransactionToDocument(generated.invNo, 'INVOICE');
+      showToast('Kontrak & Invoice Terbit!', `Nomor Invoice ${generated.invNo} siap dicetak atau dikirim via WA.`);
+
+      if (GAS_WEB_APP_URL) {
+        await callGasApi('createNewTransaction', newTx);
+      }
+    }
+
+    // PRODUCT MODAL LOGIC
+    function openProductModal() {
+      if (!isAdminUser()) {
+        showToast('Khusus Admin', 'Silakan login sebagai Admin Studio untuk menambah katalog.', false);
+        return;
+      }
+      document.getElementById('productModal').classList.remove('hidden');
+    }
+
+    function closeProductModal() {
+      document.getElementById('productModal').classList.add('hidden');
+    }
+
+    async function handleAddProductSubmit(e) {
+      e.preventDefault();
+      const nextIdx = appState.products.length + 1;
+      const newProd = {
+        id_produk: 'MP-0' + nextIdx,
+        nama_paket: document.getElementById('prodName').value,
+        kategori: document.getElementById('prodCategory').value,
+        harga: Number(document.getElementById('prodPrice').value || 0),
+        fitur_utama: document.getElementById('prodFeatures').value,
+        link_demo: '#demo',
+        link_download: document.getElementById('prodDownloadLink').value || 'https://drive.google.com',
+        tema_kartu: document.getElementById('prodTheme').value,
+        status: 'Active',
+        nomor_kartu: `MP-0${nextIdx} •••• 2026`
+      };
+
+      appState.products.push(newProd);
+      saveStateToLocalCache();
+      closeProductModal();
+      refreshAllViews();
+      showToast('Katalog Diperbarui', `${newProd.nama_paket} berhasil ditambahkan.`);
+
+      if (GAS_WEB_APP_URL) {
+        await callGasApi('addNewCatalogProduct', newProd);
+      }
+    }
+
+    function openGuideModal() {
+      document.getElementById('guideModal').classList.remove('hidden');
+    }
+    function closeGuideModal() {
+      document.getElementById('guideModal').classList.add('hidden');
+    }
+
+    function handleGlobalSearch(val) {
+      renderHolographicCards(val);
+      renderDashboardMetricsAndTable(val);
+    }
+
+    // INITIALIZATION ON LOAD
+    window.onload = function() {
+      loadStateFromLocalCache();
+      document.getElementById('docDateInput').value = new Date().toISOString().slice(0, 10);
+      document.getElementById('gasUrlInput').value = GAS_WEB_APP_URL;
+
+      refreshAllViews();
+      renderLiveDocumentPreview();
+      checkUrlVerificationParam();
+
+      if (GAS_WEB_APP_URL) {
+        syncFromGasApi();
+      }
+    };
+  </script>
+</body>
+</html>
